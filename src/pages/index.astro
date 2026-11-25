@@ -30,6 +30,14 @@ const stops = [
     <Hero />
     <ServicesCarousel />
 
+    <section class="trecho" id="sobre" aria-labelledby="sobre-titulo">
+      <div class="wrap">
+        <h2 id="sobre-titulo">Do alto, vemos além.</h2>
+        <p class="lead">Comunicação é como um voo: precisa de direção, estratégia e visão. Por isso, na Nuestra, a gente sobe para enxergar o todo antes de decidir o próximo passo.</p>
+        <a class="todos" href={withBase('/sobre/')}>Conheça a tripulação <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
     {cases.length > 0 && (
       <section class="trecho" id="cases" aria-labelledby="cases-titulo">
         <div class="wrap">
@@ -98,6 +106,7 @@ const stops = [
   .item .t { font-family: var(--font-title); font-weight: 700; font-size: 1.15rem; line-height: 1.2; }
   .item .m { font-size: 0.875rem; opacity: 0.8; }
   .item:hover .t { text-decoration: underline; text-decoration-color: var(--orange); }
+  .lead { margin: 1rem 0 0; max-width: 40rem; font-size: 1.0625rem; line-height: 1.6; }
   .todos { display: inline-block; margin-top: 1.5rem; color: var(--navy); font-weight: 600; }
   .item:focus-visible, .todos:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
 

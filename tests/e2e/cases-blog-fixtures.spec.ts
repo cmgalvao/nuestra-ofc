@@ -53,7 +53,7 @@ test.describe('Blog com conteúdo (fixtures FICTÍCIAS)', () => {
     expect(post.headline).toContain('FICTÍCIO');
     expect(post.datePublished).toBe('2026-03-10');
     expect(post.author.name).toBe('Autoria Ficticia');
-    expect(String(post.image)).toMatch(/^https:\/\/nuestra\.com\.br\/_astro\//);
+    expect(String(post.image)).toMatch(/^https:\/\/agencianuestra\.com\.br\/_astro\//);
   });
 });
 
