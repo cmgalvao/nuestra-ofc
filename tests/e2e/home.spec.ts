@@ -141,6 +141,35 @@ test.describe('Home: comportamento', () => {
     await expect(regua).toHaveAttribute('data-current', 'servicos');
     await expect(regua.locator('[data-label]').filter({ visible: true })).toHaveText(['Serviços']);
   });
+
+  test('régua de altitude também para em Sobre, entre Serviços e Contato', async ({ page }, info) => {
+    test.skip(info.project.name === 'mobile', 'a régua só aparece no desktop');
+    await page.goto('/');
+    const regua = page.locator('[data-altimeter]');
+    await expect(regua.locator('[data-stop]')).toHaveText(['Home', 'Serviços', 'Sobre', 'Contato']);
+    await page.evaluate(() => document.getElementById('sobre')!.scrollIntoView({ block: 'center', behavior: 'instant' }));
+    await expect(regua).toHaveAttribute('data-current', 'sobre');
+    await expect(regua.locator('[data-label]').filter({ visible: true })).toHaveText(['Sobre']);
+    await page.evaluate(() => document.getElementById('contato')!.scrollIntoView({ block: 'center', behavior: 'instant' }));
+    await expect(regua).toHaveAttribute('data-current', 'contato');
+  });
+
+  test('desktop: os 5 cartões de serviço cabem sem rolagem horizontal e fora da faixa da régua', async ({ page }, info) => {
+    test.skip(info.project.name === 'mobile', 'no celular o carrossel rola de lado, de propósito');
+    await page.goto('/');
+    const lista = page.locator('#servicos [data-carousel]');
+    await lista.scrollIntoViewIfNeeded();
+    const { sw, cw } = await lista.evaluate((el) => ({ sw: el.scrollWidth, cw: el.clientWidth }));
+    expect(sw).toBeLessThanOrEqual(cw + 1);
+    const largura = page.viewportSize()!.width;
+    const cartoes = lista.locator('a');
+    await expect(cartoes).toHaveCount(5);
+    for (let i = 0; i < 5; i++) {
+      const caixa = (await cartoes.nth(i).boundingBox())!;
+      expect(caixa.x).toBeGreaterThanOrEqual(0);
+      expect(caixa.x + caixa.width).toBeLessThanOrEqual(largura - 120);
+    }
+  });
 });
 
 test.describe('Home com JavaScript desligado', () => {

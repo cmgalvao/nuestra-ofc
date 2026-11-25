@@ -77,7 +77,12 @@ const servicos = (await getCollection('servicos')).sort((a, b) => a.data.order -
     .bal { right: calc(5% + 5rem); top: 1.25rem; width: 10rem; }
     .inner { padding: 0 2.75rem; }
     h2 { max-width: calc(100% - 24rem); }
-    /* Faixa de cartões de ponta a ponta, alinhada à esquerda com o título. */
-    .row { --gutter: max(2.75rem, calc((100% + 7.5rem - 72rem) / 2 + 2.75rem)); margin-top: 2.75rem; padding-top: 1rem; padding-bottom: 1.5rem; gap: 1rem; }
+    /* Faixa de cartões alinhada à esquerda com o título e parando antes da régua. Os 5 cartões dividem a largura
+       (sem rolagem de lado); só em telas mais estreitas, onde não cabem com 11rem cada, a faixa volta a rolar. */
+    .row {
+      --gutter: 2.75rem; margin: 2.75rem 7.5rem 0 max(0px, calc((100% - 72rem) / 2));
+      padding-top: 1rem; padding-bottom: 1.5rem; gap: 1rem;
+    }
+    .row li { flex: 1 1 0; min-width: 11rem; max-width: 15rem; }
   }
 </style>
