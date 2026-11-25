@@ -28,6 +28,13 @@ export function hasContentFiles(base: string): boolean {
   return existsSync(base) && readdirSync(base, { recursive: true }).some((f) => /\.(md|mdx)$/.test(String(f)));
 }
 
+/** Caminhos das páginas de lista (/cases/, /blog/) cuja coleção ainda não tem nenhum conteúdo. */
+export function emptySectionPaths(): string[] {
+  return (Object.keys(OPTIONAL_DIRS) as (keyof typeof OPTIONAL_DIRS)[])
+    .filter((name) => !hasContentFiles(optionalDir(name)))
+    .map((name) => `/${OPTIONAL_DIRS[name]}/`);
+}
+
 /**
  * glob() que não emite aviso quando a pasta ainda não tem arquivo de conteúdo.
  * A checagem acontece em cada `load()` (e não na leitura da config) e, com a pasta

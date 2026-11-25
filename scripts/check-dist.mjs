@@ -3,7 +3,7 @@ import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const DIST = process.env.OUT_DIR ?? 'dist';
-const ORIGIN = 'https://nuestra.com.br/';
+const ORIGIN = 'https://agencianuestra.com.br/';
 // Com BASE_PATH (prévia do GitHub Pages), todo link interno precisa começar pela pasta do site.
 const BASE = (process.env.BASE_PATH ?? '/').replace(/\/?$/, '/');
 const problems = [];
@@ -56,6 +56,10 @@ for (const file of pages) {
 
   if (/flower/i.test(html)) bad('referencia "flower"');
 
+  // O GA só entra pelo script, depois do aceite: o HTML nunca pode apontar para o Google.
+  if (/googletagmanager\.com/.test(html)) bad('HTML referencia googletagmanager.com (o GA só carrega após o aceite)');
+  if (process.env.PREVIEW === '1' && /cookie-banner/.test(html)) bad('prévia com aviso de cookies');
+
   for (const m of html.matchAll(/<script\b([^>]*)>/g)) {
     const attrs = m[1];
     if (/\ssrc=/.test(attrs)) continue;
@@ -67,6 +71,21 @@ if (!existsSync(join(DIST, 'sitemap-index.xml'))) problems.push('falta sitemap-i
 if (!existsSync(join(DIST, 'robots.txt'))) problems.push('falta robots.txt');
 for (const f of files.filter((f) => /sitemap.*\.xml$/.test(f))) {
   if (/<loc>[^<]*\/404\/?<\/loc>/.test(readFileSync(f, 'utf8'))) problems.push(`${relative(DIST, f)} lista /404/`);
+}
+
+// Fora da prévia, página com noindex (ex.: Cases/Blog vazios) não pode estar no sitemap.
+if (process.env.PREVIEW !== '1') {
+  const sitemapPaths = new Set();
+  for (const f of files.filter((f) => /sitemap-\d+\.xml$/.test(f))) {
+    for (const m of readFileSync(f, 'utf8').matchAll(/<loc>([^<]*)<\/loc>/g)) sitemapPaths.add(new URL(m[1]).pathname);
+  }
+  for (const file of pages) {
+    const name = relative(DIST, file).replaceAll(String.fromCharCode(92), '/');
+    const caminho = '/' + name.replace(/index\.html$/, '');
+    if (/<meta[^>]*name="robots"[^>]*noindex/.test(readFileSync(file, 'utf8')) && sitemapPaths.has(caminho)) {
+      problems.push(`${name}: tem noindex mas está no sitemap`);
+    }
+  }
 }
 
 if (problems.length) {

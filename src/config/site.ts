@@ -1,5 +1,5 @@
 export const SITE = {
-  name: 'Nuestra Agência', url: 'https://nuestra.com.br', locale: 'pt-BR',
+  name: 'Nuestra Agência', url: 'https://agencianuestra.com.br', locale: 'pt-BR',
   email: 'nuestraoficial@gmail.com', emailSubject: 'Contato pelo site',
   instagramHandle: '@agencianuestra', instagramUrl: 'https://www.instagram.com/agencianuestra',
   whatsappNumber: '5555991932679', whatsappDisplay: '+55 55 9 9193-2679',
@@ -11,6 +11,7 @@ export const SITE = {
 
 export const NAV = [
   { label: 'Home', href: '/' },
+  { label: 'Sobre', href: '/sobre/' },
   { label: 'Serviços', href: '/servicos/' },
   { label: 'Cases', href: '/cases/' },
   { label: 'Blog', href: '/blog/' },

@@ -1,0 +1,38 @@
+---
+import { withBase } from '../lib/url';
+import { analyticsEnabled } from '../lib/consent';
+
+const gaId = import.meta.env.PUBLIC_GA_ID as string | undefined;
+const ativo = analyticsEnabled(gaId, process.env.PREVIEW);
+---
+{ativo && (
+  <aside id="cookie-banner" class="cookie-banner" aria-label="Aviso de cookies" tabindex="-1" hidden data-ga-id={gaId}>
+    <p>
+      Usamos cookies de medição (Google Analytics) para entender como o site é usado. Eles só são ativados se você
+      aceitar. <a href={withBase('/politica-de-privacidade/')}>Política de privacidade</a>
+    </p>
+    <div class="acoes">
+      <button type="button" data-cookie-reject>Recusar</button>
+      <button type="button" class="aceitar" data-cookie-accept>Aceitar</button>
+    </div>
+  </aside>
+)}
+{ativo && <script>import '../scripts/consent';</script>}
+<style>
+  .cookie-banner {
+    position: fixed; inset: auto 0.75rem 0.75rem; z-index: 50; max-width: 40rem; margin: 0 auto;
+    background: var(--navy); color: #fff; border-radius: 0.75rem; padding: 1rem 1.125rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); display: grid; gap: 0.75rem;
+  }
+  .cookie-banner[hidden] { display: none; }
+  .cookie-banner:focus { outline: none; }
+  p { margin: 0; font-size: 0.9375rem; line-height: 1.5; }
+  a { color: #fff; text-decoration: underline; text-decoration-color: var(--orange-light); }
+  .acoes { display: flex; gap: 0.6rem; justify-content: flex-end; }
+  button {
+    font: inherit; font-weight: 500; padding: 0.6rem 1.2rem; border-radius: 999px; cursor: pointer;
+    background: transparent; color: #fff; border: 1px solid rgba(255, 255, 255, 0.7);
+  }
+  button.aceitar { background: var(--orange-light); color: var(--navy); border-color: var(--orange-light); }
+  button:focus-visible, a:focus-visible { outline: 3px solid var(--orange-light); outline-offset: 3px; }
+</style>

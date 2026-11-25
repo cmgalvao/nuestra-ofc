@@ -1,0 +1,13 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "24"
+
+# Cópias de teste do Netlify nunca entram no Google.
+[context.deploy-preview.environment]
+  PREVIEW = "1"
+
+[context.branch-deploy.environment]
+  PREVIEW = "1"

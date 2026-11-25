@@ -53,7 +53,7 @@ test.describe('Blog com conteúdo (fixtures FICTÍCIAS)', () => {
     expect(post.headline).toContain('FICTÍCIO');
     expect(post.datePublished).toBe('2026-03-10');
     expect(post.author.name).toBe('Autoria Ficticia');
-    expect(String(post.image)).toMatch(/^https:\/\/nuestra\.com\.br\/_astro\//);
+    expect(String(post.image)).toMatch(/^https:\/\/agencianuestra\.com\.br\/_astro\//);
   });
 });
 
@@ -70,3 +70,14 @@ for (const path of ['/cases/', '/blog/', '/cases/exemplo-completo/', '/blog/exem
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
   });
 }
+
+test.describe('Cases e Blog com conteúdo ficam indexáveis (fixtures FICTÍCIAS)', () => {
+  for (const rota of ['/cases/', '/blog/']) {
+    test(`${rota} sem noindex e dentro do sitemap`, async ({ page, request }) => {
+      await page.goto(rota);
+      await expect(page.locator('meta[name=robots]')).toHaveCount(0);
+      const sitemap = await (await request.get('/sitemap-0.xml')).text();
+      expect(sitemap).toContain(`agencianuestra.com.br${rota}`);
+    });
+  }
+});

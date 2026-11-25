@@ -10,7 +10,7 @@ test.describe('página 404', () => {
     await expect(page.locator('h1')).toHaveCount(1);
     await expect(page.locator('h1')).toHaveText('Esse voo não existe.');
     await expect(page).toHaveTitle('Página não encontrada | Nuestra Agência');
-    expect(await page.locator('link[rel=canonical]').getAttribute('href')).toMatch(/^https:\/\/nuestra\.com\.br/);
+    expect(await page.locator('link[rel=canonical]').getAttribute('href')).toMatch(/^https:\/\/agencianuestra\.com\.br/);
     await expect(page.locator('meta[name=robots]')).toHaveAttribute('content', 'noindex');
     const ld = await page.locator('script[type="application/ld+json"]').allTextContents();
     expect(ld.join('')).toContain('"ProfessionalService"');
@@ -18,7 +18,7 @@ test.describe('página 404', () => {
 
   test('rodapé com menu e e-mail', async ({ page }) => {
     const footer = page.locator('footer');
-    await expect(footer.locator('nav a')).toHaveCount(5);
+    await expect(footer.locator('nav a')).toHaveCount(6);
     await expect(footer.locator('a[href^="mailto:nuestraoficial@gmail.com"]')).toHaveCount(1);
   });
 
