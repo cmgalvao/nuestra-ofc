@@ -78,6 +78,19 @@ test.describe('aviso de cookies', () => {
   });
 });
 
+test('com denied já gravado, cookies _ga* sobrando são apagados e o GA fica desligado', async ({ page, context }) => {
+  const chamadas = await vigiarGoogle(page);
+  await page.addInitScript(() => localStorage.setItem('nuestra-consent', 'denied'));
+  await context.addCookies([
+    { name: '_ga', value: 'x', url: 'http://localhost:4324/' },
+    { name: '_ga_TEST000000', value: 'y', url: 'http://localhost:4324/' },
+  ]);
+  await page.goto('/');
+  expect(await page.evaluate(() => document.cookie)).not.toMatch(/_ga/);
+  expect(await page.evaluate(() => (window as unknown as Record<string, unknown>)['ga-disable-G-TEST000000'])).toBe(true);
+  expect(chamadas).toEqual([]);
+});
+
 test.describe('sem JavaScript', () => {
   test.use({ javaScriptEnabled: false });
 

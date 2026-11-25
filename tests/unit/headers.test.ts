@@ -16,4 +16,8 @@ describe('CSP de public/_headers', () => {
   it('connect-src libera o Google Analytics', () => {
     expect(diretiva('connect-src')).toContain('https://*.google-analytics.com');
   });
+
+  it('connect-src libera https://*.google.com, pedido pela documentação do GA4 sem Ads', () => {
+    expect(diretiva('connect-src')).toContain('https://*.google.com');
+  });
 });

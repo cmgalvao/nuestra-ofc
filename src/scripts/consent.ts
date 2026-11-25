@@ -60,9 +60,19 @@ if (banner && gaId) {
     banner.hidden = true;
   };
 
+  // Com o GA desligado para este ID, o gtag não envia nada nem regrava cookies (opt-out oficial do Google).
+  const desligarGa = () => {
+    (window as unknown as Record<string, unknown>)[`ga-disable-${gaId}`] = true;
+  };
+
   const inicial = lerConsentimento();
   if (inicial === 'granted') loadGa(gaId);
   else if (inicial === null) mostrar();
+  else {
+    // Recusou antes: garante que nenhum cookie _ga* sobrou (ex.: gravado pelo gtag ao fechar a página).
+    desligarGa();
+    clearGaCookies();
+  }
 
   banner.querySelector('[data-cookie-accept]')?.addEventListener('click', () => {
     guardar('granted');
@@ -75,6 +85,7 @@ if (banner && gaId) {
     guardar('denied');
     esconder();
     if (antes === 'granted' || (window as GaWindow).__gaLoaded) {
+      desligarGa();
       clearGaCookies();
       location.reload();
     }
