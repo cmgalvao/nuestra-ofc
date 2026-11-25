@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../../lib/url';
 import { Image } from 'astro:assets';
 import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -42,7 +43,7 @@ const secoes = [
         ))}
       </div>
     )}
-    <a class="volta" href="/cases/"><span aria-hidden="true">←</span> Todos os cases</a>
+    <a class="volta" href={withBase('/cases/')}><span aria-hidden="true">←</span> Todos os cases</a>
   </article>
 </BaseLayout>
 <style>

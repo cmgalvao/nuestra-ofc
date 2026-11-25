@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../../lib/url';
 import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHead from '../../components/PageHead.astro';
@@ -29,7 +30,7 @@ const crumbs = [{ name: 'Blog', path: '/blog/' }];
         <ul class="posts" role="list">
           {posts.map((p) => (
             <li>
-              <a class="item" href={`/blog/${p.id}/`}>
+              <a class="item" href={withBase(`/blog/${p.id}/`)}>
                 <Image src={p.data.capa} alt={p.data.capaAlt} widths={[320, 640]} sizes="(min-width: 900px) 18rem, 100vw" />
                 <span class="txt">
                   <time datetime={dataISO(p.data.data)}>{dataBR(p.data.data)}</time>

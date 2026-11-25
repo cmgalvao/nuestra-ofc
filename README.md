@@ -106,6 +106,13 @@ npm run copy:drive
 
 Esse comando gera o site e copia o projeto para `G:\Meu Drive\PROJETOS\2026-2027 SITES\NUESTRA\Site\Site Inicial\nuestra-site`. No final aparece "Cópia concluída". Lembrete: o código de verdade mora em `C:\Projetos\nuestra-site`; a cópia no Drive é um backup e é sobrescrita a cada vez. Não edite os arquivos por lá.
 
+## Prévia para o cliente (GitHub Pages)
+
+O código fica em <https://github.com/cmgalvao/nuestra-ofc>. A cada envio para o `main`, o GitHub gera sozinho uma prévia navegável em <https://cmgalvao.github.io/nuestra-ofc/> (arquivo `.github/workflows/pages.yml`).
+
+- A prévia fica fora do Google de propósito, para não competir com o nuestra.com.br quando ele for ao ar.
+- Links internos usam `withBase()` (`src/lib/url.ts`), para funcionarem tanto na prévia (pasta `/nuestra-ofc/`) quanto no site oficial (raiz).
+
 ## O que está pendente
 
 - Página Sobre.

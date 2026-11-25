@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../lib/url';
 import { Image } from 'astro:assets';
 import { SITE, NAV } from '../config/site';
 import { mailtoUrl, whatsappUrl } from '../lib/contact';
@@ -7,12 +8,12 @@ import Icon from './Icon.astro';
 ---
 <footer class="site-footer">
   <div class="inner">
-    <a class="logo" href="/">
+    <a class="logo" href={withBase('/')}>
       <Image src={logo} alt="Nuestra Agência" height={36} widths={[120, 240]} sizes="120px" />
     </a>
     <nav aria-label="Rodapé">
       <ul class="links">
-        {NAV.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        {NAV.map((item) => <li><a href={withBase(item.href)}>{item.label}</a></li>)}
       </ul>
     </nav>
     <ul class="contacts">

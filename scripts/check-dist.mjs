@@ -4,6 +4,8 @@ import { join, relative } from 'node:path';
 
 const DIST = process.env.OUT_DIR ?? 'dist';
 const ORIGIN = 'https://nuestra.com.br/';
+// Com BASE_PATH (prévia do GitHub Pages), todo link interno precisa começar pela pasta do site.
+const BASE = (process.env.BASE_PATH ?? '/').replace(/\/?$/, '/');
 const problems = [];
 
 function walk(dir) {
@@ -46,6 +48,10 @@ for (const file of pages) {
   for (const img of html.match(/<img\b[^>]*>/g) ?? []) {
     // O Astro minifica alt="" para um "alt" sem valor; os dois formatos contam.
     if (!/\salt(\s|=|\/|>)/.test(img)) bad(`<img> sem alt: ${img.slice(0, 80)}`);
+  }
+
+  for (const m of html.matchAll(/\s(?:href|src)="(\/[^"]*)"/g)) {
+    if (!m[1].startsWith(BASE) && !m[1].startsWith('//')) bad(`link interno fora de ${BASE}: ${m[1]}`);
   }
 
   if (/flower/i.test(html)) bad('referencia "flower"');

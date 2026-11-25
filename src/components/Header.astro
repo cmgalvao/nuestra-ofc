@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../lib/url';
 import { Image } from 'astro:assets';
 import { NAV } from '../config/site';
 import { whatsappUrl } from '../lib/contact';
@@ -12,7 +13,7 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
 <a class="skip" href="#conteudo">Pular para o conteúdo</a>
 <header class:list={['site-header', { home: isHome }]}>
   <div class="bar">
-    <a class="logo" href="/">
+    <a class="logo" href={withBase('/')}>
       <Image src={logo} alt="Nuestra Agência" height={36} widths={[120, 240]} sizes="120px" loading="eager" />
     </a>
     <button type="button" class="menu-btn" data-menu-toggle aria-expanded="false" aria-controls="menu-principal">Menu</button>
@@ -20,7 +21,7 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
       <ul>
         {NAV.map((item) => (
           <li>
-            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
+            <a href={withBase(item.href)} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
           </li>
         ))}
       </ul>

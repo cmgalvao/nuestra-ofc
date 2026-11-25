@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../lib/url';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { whatsappUrl } from '../lib/contact';
 ---
@@ -7,9 +8,9 @@ import { whatsappUrl } from '../lib/contact';
     <h1>Esse voo não existe.</h1>
     <p>A página que você procurou mudou de rota ou nunca decolou.</p>
     <p class="actions">
-      <a class="btn primary" href="/">Voltar para a Home</a>
-      <a class="btn" href="/servicos/">Ver serviços</a>
-      <a class="btn" href="/contatos/">Contatos</a>
+      <a class="btn primary" href={withBase('/')}>Voltar para a Home</a>
+      <a class="btn" href={withBase('/servicos/')}>Ver serviços</a>
+      <a class="btn" href={withBase('/contatos/')}>Contatos</a>
       <a class="btn" href={whatsappUrl()} target="_blank" rel="noopener">Falar com a Nuestra</a>
     </p>
   </section>
