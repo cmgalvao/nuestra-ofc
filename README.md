@@ -93,6 +93,11 @@ Texto do post.
 
 Se algum campo obrigatório faltar, o `npm run dev` mostra um aviso dizendo qual.
 
+### Regras para os arquivos de Cases e Blog
+
+- Os nomes dos arquivos não têm acento nem espaço (exemplo: `padaria-sao-joao.md`).
+- O texto de um post ou case usa `##` para os subtítulos, nunca `#` (o título da página já é o `#`).
+
 ## Guardar uma cópia no Drive
 
 ```

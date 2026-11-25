@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/check-dist.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest run",
@@ -24,6 +24,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.14.1",
     "@playwright/test": "^1.65.1",
+    "sharp": "^0.35.5",
     "vitest": "^5.1.1"
   }
 }

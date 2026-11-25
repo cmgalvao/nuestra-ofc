@@ -5,13 +5,13 @@ import Altimeter from '../components/Altimeter.astro';
 import Hero from '../components/Hero.astro';
 import ServicesCarousel from '../components/ServicesCarousel.astro';
 import { whatsappUrl } from '../lib/contact';
+import { dataBR } from '../lib/format';
 import { optionalCollection } from '../lib/optional-collection';
 
 // Trechos de Cases e Blog: só aparecem quando a coleção tem itens (até 3, do mais recente).
 const porData = <T extends { data: { data: Date } }>(a: T, b: T) => b.data.data.getTime() - a.data.data.getTime();
 const cases = (await optionalCollection('cases')).sort(porData).slice(0, 3);
 const posts = (await optionalCollection('blog')).sort(porData).slice(0, 3);
-const dataBR = (d: Date) => d.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
 const stops = [
   { id: 'decolagem', label: 'Home' },

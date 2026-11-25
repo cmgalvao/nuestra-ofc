@@ -27,7 +27,8 @@ const cases = defineCollection({
       solucao: z.string().optional(),
       resultado: z.string().optional(),
       data: z.coerce.date(),
-    }),
+    })
+    .strict(),
 });
 
 const blog = defineCollection({
@@ -40,7 +41,8 @@ const blog = defineCollection({
       capaAlt: z.string(),
       data: z.coerce.date(),
       autor: z.string(),
-    }),
+    })
+    .strict(),
 });
 
 export const collections = { servicos, cases, blog };
