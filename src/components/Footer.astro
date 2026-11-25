@@ -27,6 +27,7 @@ const cookiesAtivos = analyticsEnabled(import.meta.env.PUBLIC_GA_ID as string | 
     </ul>
     <p class="copy">
       © {new Date().getFullYear()} {SITE.name}
+      <a class="privacidade" href={withBase('/politica-de-privacidade/')}>Política de privacidade</a>
       {cookiesAtivos && <button type="button" class="cookies" data-open-cookies>Cookies</button>}
     </p>
   </div>
@@ -41,6 +42,7 @@ const cookiesAtivos = analyticsEnabled(import.meta.env.PUBLIC_GA_ID as string | 
   a { color: #fff; text-decoration: none; }
   a:hover { text-decoration: underline; text-decoration-color: var(--orange-light); }
   a:focus-visible { outline: 3px solid var(--orange-light); outline-offset: 3px; }
+  .privacidade { margin-left: 1rem; }
   .cookies { font: inherit; color: #fff; background: none; border: 0; padding: 0; margin-left: 1rem; text-decoration: underline; text-decoration-color: var(--orange-light); cursor: pointer; }
   .cookies:focus-visible { outline: 3px solid var(--orange-light); outline-offset: 3px; }
   .contacts { display: grid; gap: 0.6rem; }

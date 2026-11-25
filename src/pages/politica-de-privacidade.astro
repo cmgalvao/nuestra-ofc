@@ -1,0 +1,96 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import { SITE } from '../config/site';
+import { mailtoUrl } from '../lib/contact';
+
+const crumbs = [{ name: 'Política de Privacidade', path: '/politica-de-privacidade/' }];
+---
+<BaseLayout
+  title="Política de Privacidade"
+  description="Como o site da Nuestra trata dados pessoais e cookies, e como você exerce seus direitos pela LGPD."
+  path="/politica-de-privacidade/"
+  breadcrumbs={crumbs}
+  showBreadcrumbs={false}
+>
+  <PageHead
+    title="Política de Privacidade"
+    intro="Aqui explicamos, em linguagem simples, quais dados o site da Nuestra usa, para quê e como você pode controlá-los."
+    crumbs={crumbs}
+  />
+  <section class="corpo">
+    <div class="wrap">
+      <article class="card">
+        <h2>Quem somos</h2>
+        <p>
+          O responsável por este site é a {SITE.name} — Marília Zabott, proprietária — CNPJ 47.807.866/0001-72,
+          de {SITE.city}/{SITE.region}. Para qualquer assunto sobre seus dados, fale com a gente pelo e-mail
+          <a href={mailtoUrl()}>{SITE.email}</a>.
+        </p>
+
+        <h2>Dados que coletamos</h2>
+        <p>
+          O site não tem formulários nem cadastro. Ao clicar em WhatsApp, e-mail ou Instagram, a conversa acontece
+          nesses serviços, que têm políticas de privacidade próprias. Quando você nos escreve, recebemos o que você
+          mesmo enviar (por exemplo, nome, telefone ou e-mail e a sua mensagem) e usamos só para responder e conduzir o
+          atendimento.
+        </p>
+        <p>
+          Se você aceitar, também medimos o uso do site com o Google Analytics: páginas visitadas, tempo de visita,
+          tipo de aparelho e região aproximada. Esses dados servem para melhorar o site e não identificam você pelo
+          nome.
+        </p>
+
+        <h2>Para que usamos e em que base legal</h2>
+        <p>
+          A medição de visitas só acontece com o seu consentimento (LGPD, art. 7º, inciso I). O atendimento aos
+          contatos que você inicia usa os dados que você mesmo envia, para responder ao seu pedido.
+        </p>
+
+        <h2>Cookies e Google Analytics</h2>
+        <p>
+          Ao entrar no site, mostramos um aviso para você aceitar ou recusar os cookies de medição (nomes que começam
+          por <code>_ga</code>). Sem o seu aceite, o Google Analytics não é carregado e nenhum cookie de medição é
+          criado. Você pode mudar de ideia a qualquer momento pelo botão “Cookies” no rodapé do site: ao recusar,
+          apagamos esses cookies.
+        </p>
+
+        <h2>Com quem compartilhamos</h2>
+        <p>
+          Os dados de medição ficam com o Google (Google Analytics), e o site é hospedado na Netlify. Não vendemos nem
+          cedemos seus dados a terceiros para outras finalidades.
+        </p>
+
+        <h2>Por quanto tempo guardamos</h2>
+        <p>
+          Guardamos as mensagens de atendimento enquanto durar a conversa ou a relação com a agência. Os dados de
+          medição ficam pelo período de retenção configurado no Google Analytics.
+        </p>
+
+        <h2>Seus direitos</h2>
+        <p>
+          A LGPD (art. 18) garante a você, entre outros direitos, confirmar se tratamos seus dados, acessá-los,
+          corrigi-los, pedir a exclusão e revogar o consentimento. Para exercer qualquer um deles, escreva para
+          <a href={mailtoUrl()}>{SITE.email}</a>.
+        </p>
+
+        <h2>Alterações</h2>
+        <p>Esta política pode mudar. A data da última atualização aparece abaixo.</p>
+        <p class="data">Atualizada em 25/11/2026.</p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .corpo { background: url('../assets/papel.webp') center / 30rem #f3efe8; padding: 2rem 1rem 3rem; color: var(--navy); }
+  .wrap { max-width: 48rem; margin: 0 auto; }
+  .card { background: #fff; border-radius: 0.75rem; box-shadow: 0 6px 18px rgba(1, 62, 80, 0.12); padding: 1.5rem 1.25rem 1.75rem; }
+  h2 { margin: 1.5rem 0 0.5rem; font-weight: 800; font-size: clamp(1.25rem, 5vw, 1.6rem); line-height: 1.15; }
+  h2:first-child { margin-top: 0; }
+  p { margin: 0 0 1rem; line-height: 1.6; color: #1d4452; }
+  a { color: var(--navy); text-decoration: underline; text-decoration-color: var(--orange); overflow-wrap: anywhere; }
+  a:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+  code { font-size: 0.9em; }
+  .data { font-size: 0.875rem; opacity: 0.8; margin-bottom: 0; }
+  @media (min-width: 900px) { .card { padding: 2rem 2rem 2.25rem; } .corpo { padding: 3rem 1rem 4rem; } }
+</style>
