@@ -154,6 +154,23 @@ test.describe('Home: comportamento', () => {
     await expect(regua).toHaveAttribute('data-current', 'contato');
   });
 
+  test('o trecho Sobre da Home é centralizado, como o de Contato', async ({ page }) => {
+    await page.goto('/');
+    const centro = (seletor: string) =>
+      page.locator(seletor).evaluate((el) => {
+        const r = el.getBoundingClientRect();
+        return { meio: Math.round(r.left + r.width / 2), alinhamento: getComputedStyle(el).textAlign };
+      });
+    const larguraUtil = await page.evaluate(() => document.documentElement.clientWidth);
+    for (const seletor of ['#sobre h2', '#sobre .lead', '#sobre .todos']) {
+      await page.locator(seletor).scrollIntoViewIfNeeded();
+      const { meio } = await centro(seletor);
+      expect(Math.abs(meio - larguraUtil / 2), `${seletor} fora do centro`).toBeLessThanOrEqual(2);
+    }
+    expect((await centro('#sobre h2')).alinhamento).toBe('center');
+    expect((await centro('#contato h2')).alinhamento).toBe('center');
+  });
+
   test('desktop: os 5 cartões de serviço cabem sem rolagem horizontal e fora da faixa da régua', async ({ page }, info) => {
     test.skip(info.project.name === 'mobile', 'no celular o carrossel rola de lado, de propósito');
     await page.goto('/');
