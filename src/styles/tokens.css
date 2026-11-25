@@ -1,0 +1,15 @@
+:root {
+  --navy: #013E50;
+  --teal: #006A6D;
+  --orange-light: #F5A160;
+  --orange: #DF673D;
+  --cream: #F3EFE8;
+
+  --sky-gradient: linear-gradient(180deg, #0b3f4d 0%, #1d5560 30%, #5a5a55 62%, #c2673f 88%, #e8864d 100%);
+  /* Textura de grão (feTurbulence); aplicar com opacity var(--grain-opacity) */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grain-opacity: 0.16;
+
+  --font-title: 'Bitter', Georgia, serif;
+  --font-body: 'Jost Variable', system-ui, sans-serif;
+}

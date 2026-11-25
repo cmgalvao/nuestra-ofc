@@ -1,0 +1,28 @@
+@import './tokens.css';
+@import '@fontsource/bitter/400.css';
+@import '@fontsource/bitter/700.css';
+@import '@fontsource/bitter/800.css';
+@import '@fontsource/bitter/400-italic.css';
+@import '@fontsource/bitter/700-italic.css';
+@import '@fontsource-variable/jost';
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--navy);
+  background: var(--cream);
+  line-height: 1.5;
+}
+img, svg { max-width: 100%; height: auto; display: block; }
+h1, h2, h3 { font-family: var(--font-title); margin: 0; }
+p { margin: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
