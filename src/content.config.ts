@@ -1,7 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
-import { OPTIONAL_DIRS, optionalGlob } from './lib/optional-glob';
+import { optionalGlob } from './lib/optional-glob';
 
 const servicos = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/servicos' }),
@@ -15,7 +15,7 @@ const servicos = defineCollection({
 });
 
 const cases = defineCollection({
-  loader: optionalGlob(OPTIONAL_DIRS.cases),
+  loader: optionalGlob('cases'),
   schema: ({ image }) =>
     z.object({
       titulo: z.string(),
@@ -31,7 +31,7 @@ const cases = defineCollection({
 });
 
 const blog = defineCollection({
-  loader: optionalGlob(OPTIONAL_DIRS.blog),
+  loader: optionalGlob('blog'),
   schema: ({ image }) =>
     z.object({
       titulo: z.string(),

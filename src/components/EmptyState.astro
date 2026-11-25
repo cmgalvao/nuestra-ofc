@@ -1,0 +1,18 @@
+---
+import { SITE } from '../config/site';
+import Icon from './Icon.astro';
+
+interface Props { texto: string }
+const { texto } = Astro.props;
+---
+<div class="vazio">
+  <p>{texto}</p>
+  <a class="btn" href={SITE.instagramUrl} target="_blank" rel="noopener"><Icon name="instagram" /> Ver no Instagram</a>
+</div>
+<style>
+  .vazio { max-width: 36rem; margin: 0 auto; padding: 2.5rem 1.25rem; text-align: center; background: #fff; border-radius: 0.75rem; box-shadow: 0 6px 18px rgba(1, 62, 80, 0.12); }
+  p { margin: 0; font-family: var(--font-title); font-weight: 700; font-size: clamp(1.15rem, 1rem + 1vw, 1.45rem); line-height: 1.35; color: var(--navy); text-wrap: balance; }
+  .btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.5rem; padding: 0.8rem 1.5rem; border-radius: 999px; background: var(--orange-light); color: var(--navy); font-weight: 500; text-decoration: none; }
+  .btn:hover { background: #f8b47e; }
+  .btn:focus-visible { outline: 3px solid var(--navy); outline-offset: 3px; }
+</style>

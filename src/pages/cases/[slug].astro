@@ -1,0 +1,61 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { optionalCollection } from '../../lib/optional-collection';
+
+export async function getStaticPaths() {
+  const cases = await optionalCollection('cases');
+  return cases.map((c) => ({ params: { slug: c.id }, props: { entry: c } }));
+}
+
+const { entry } = Astro.props;
+const { titulo, cliente, imagens, descricao, desafio, solucao, resultado } = entry.data;
+const { Content } = await render(entry);
+const hasBody = !!entry.body?.trim();
+const path = `/cases/${entry.id}/`;
+const crumbs = [{ name: 'Cases', path: '/cases/' }, { name: titulo, path }];
+const secoes = [
+  { titulo: 'Desafio', texto: desafio },
+  { titulo: 'O que fizemos', texto: solucao },
+  { titulo: 'Resultado', texto: resultado },
+].filter((s) => !!s.texto);
+---
+<BaseLayout title={titulo} description={descricao} path={path} breadcrumbs={crumbs}>
+  <article class="case">
+    <header>
+      <p class="cliente">{cliente}</p>
+      <h1>{titulo}</h1>
+      <p class="desc">{descricao}</p>
+    </header>
+    {secoes.map((s) => (
+      <section>
+        <h2>{s.titulo}</h2>
+        <p>{s.texto}</p>
+      </section>
+    ))}
+    {hasBody && <div class="corpo"><Content /></div>}
+    {imagens.length > 0 && (
+      <div class="imagens">
+        {imagens.map((img) => (
+          <Image src={img} alt={descricao} widths={[480, 960, 1440]} sizes="(min-width: 900px) 56rem, 100vw" />
+        ))}
+      </div>
+    )}
+    <a class="volta" href="/cases/"><span aria-hidden="true">←</span> Todos os cases</a>
+  </article>
+</BaseLayout>
+<style>
+  .case { max-width: 56rem; margin: 0 auto; padding: 2rem 1.25rem 3.5rem; color: var(--navy); }
+  .cliente { margin: 0; font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--teal); }
+  h1 { margin: 0.4rem 0 0; font-weight: 800; font-size: clamp(1.75rem, 1.2rem + 2.5vw, 2.75rem); line-height: 1.1; overflow-wrap: anywhere; }
+  .desc { margin: 1rem 0 0; font-size: 1.125rem; line-height: 1.5; }
+  section { margin-top: 2rem; }
+  h2 { margin: 0 0 0.4rem; font-weight: 800; font-size: 1.4rem; }
+  section p, .corpo :global(p) { margin: 0 0 1rem; line-height: 1.6; }
+  .corpo { margin-top: 2rem; }
+  .imagens { display: grid; gap: 1rem; margin-top: 2rem; }
+  .imagens :global(img) { width: 100%; height: auto; border-radius: 0.625rem; box-shadow: 0 6px 18px rgba(1, 62, 80, 0.15); }
+  .volta { display: inline-block; margin-top: 2.5rem; color: var(--navy); font-weight: 600; }
+  .volta:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+</style>

@@ -24,3 +24,7 @@ pnpm-debug.log*
 .idea/
 test-results/
 playwright-report/
+
+# fixtures build (tests)
+dist-fixtures/
+node_modules/.astro-fixtures/

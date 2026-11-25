@@ -1,0 +1,60 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHead from '../../components/PageHead.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import { optionalCollection } from '../../lib/optional-collection';
+import { dataBR, dataISO } from '../../lib/format';
+
+const posts = (await optionalCollection('blog')).sort((a, b) => b.data.data.getTime() - a.data.data.getTime());
+const crumbs = [{ name: 'Blog', path: '/blog/' }];
+---
+<BaseLayout
+  title="Blog"
+  description="Visão de cima: ideias, tendências e reflexões sobre comunicação e marketing para quem toma decisões."
+  path="/blog/"
+  breadcrumbs={crumbs}
+  showBreadcrumbs={false}
+>
+  <PageHead
+    title="Visão de cima."
+    intro="Ideias, tendências e reflexões sobre comunicação e marketing para quem toma decisões. Conteúdo direto, sem fórmulas prontas, para você enxergar o seu negócio com outros olhos."
+    crumbs={crumbs}
+  />
+  <section class="lista">
+    <div class="wrap">
+      {posts.length === 0 ? (
+        <EmptyState texto="Em breve, o primeiro post. Enquanto isso, acompanhe a Nuestra no Instagram." />
+      ) : (
+        <ul class="posts" role="list">
+          {posts.map((p) => (
+            <li>
+              <a class="item" href={`/blog/${p.id}/`}>
+                <Image src={p.data.capa} alt={p.data.capaAlt} widths={[320, 640]} sizes="(min-width: 900px) 18rem, 100vw" />
+                <span class="txt">
+                  <time datetime={dataISO(p.data.data)}>{dataBR(p.data.data)}</time>
+                  <span class="t">{p.data.titulo}</span>
+                  <span class="d">{p.data.descricao}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .lista { background: url('../../assets/papel.png') center / 30rem #f3efe8; padding: 2.5rem 1rem 3.5rem; color: var(--navy); }
+  .wrap { max-width: 56rem; margin: 0 auto; }
+  .posts { list-style: none; margin: 0; padding: 0; display: grid; gap: 2rem; }
+  .item { display: grid; gap: 0.9rem; color: inherit; text-decoration: none; }
+  .item :global(img) { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 0.625rem; box-shadow: 0 6px 18px rgba(1, 62, 80, 0.15); }
+  .txt { display: flex; flex-direction: column; gap: 0.35rem; }
+  time { font-size: 0.8125rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); }
+  .t { font-family: var(--font-title); font-weight: 700; font-size: 1.3rem; line-height: 1.2; overflow-wrap: anywhere; }
+  .d { line-height: 1.5; }
+  .item:hover .t { text-decoration: underline; text-decoration-color: var(--orange); }
+  .item:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+  @media (min-width: 900px) { .item { grid-template-columns: 18rem 1fr; align-items: center; gap: 1.75rem; } .lista { padding: 3.5rem 2.75rem 5rem; } }
+</style>

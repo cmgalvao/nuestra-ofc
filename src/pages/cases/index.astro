@@ -1,0 +1,54 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHead from '../../components/PageHead.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import { optionalCollection } from '../../lib/optional-collection';
+
+const cases = (await optionalCollection('cases')).sort((a, b) => b.data.data.getTime() - a.data.data.getTime());
+const crumbs = [{ name: 'Cases', path: '/cases/' }];
+---
+<BaseLayout
+  title="Cases"
+  description="Marcas que ajudamos a decolar: identidades, campanhas e estratégias que saíram do papel."
+  path="/cases/"
+  breadcrumbs={crumbs}
+  showBreadcrumbs={false}
+>
+  <PageHead
+    title="Marcas que ajudamos a decolar."
+    intro="Identidades, campanhas e estratégias que saíram do papel. Veja alguns dos trabalhos que fizemos ao lado de quem embarcou com a gente."
+    crumbs={crumbs}
+  />
+  <section class="lista">
+    <div class="wrap">
+      {cases.length === 0 ? (
+        <EmptyState texto="Em breve, os cases por aqui. Enquanto isso, veja nossos trabalhos no Instagram." />
+      ) : (
+        <ul class="grade" role="list">
+          {cases.map((c) => (
+            <li>
+              <a class="item" href={`/cases/${c.id}/`}>
+                <Image src={c.data.capa} alt="" widths={[320, 640]} sizes="(min-width: 900px) 22rem, 100vw" />
+                <span class="t">{c.data.titulo}</span>
+                <span class="m">{c.data.cliente}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .lista { background: url('../../assets/papel.png') center / 30rem #f3efe8; padding: 2.5rem 1rem 3.5rem; color: var(--navy); }
+  .wrap { max-width: 72rem; margin: 0 auto; }
+  .grade { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.5rem; }
+  .item { display: flex; flex-direction: column; gap: 0.35rem; color: inherit; text-decoration: none; }
+  .item :global(img) { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 0.625rem; box-shadow: 0 6px 18px rgba(1, 62, 80, 0.15); margin-bottom: 0.4rem; }
+  .t { font-family: var(--font-title); font-weight: 700; font-size: 1.2rem; line-height: 1.2; overflow-wrap: anywhere; }
+  .m { font-size: 0.875rem; opacity: 0.8; }
+  .item:hover .t { text-decoration: underline; text-decoration-color: var(--orange); }
+  .item:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+  @media (min-width: 900px) { .grade { grid-template-columns: repeat(3, 1fr); } .lista { padding: 3.5rem 2.75rem 5rem; } }
+</style>
