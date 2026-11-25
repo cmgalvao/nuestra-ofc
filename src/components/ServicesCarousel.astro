@@ -35,7 +35,7 @@ const servicos = (await getCollection('servicos')).sort((a, b) => a.data.order -
 </section>
 <style>
   .servicos { position: relative; overflow: hidden; background: var(--teal); color: #fff; padding: 4.5rem 0 3rem; }
-  .grain { position: absolute; inset: 0; z-index: 1; pointer-events: none; background-image: var(--grain); opacity: var(--grain-opacity); mix-blend-mode: overlay; }
+  .grain { position: absolute; inset: 0; z-index: 1; pointer-events: none; background-image: var(--grain); opacity: var(--grain-opacity); }
   .arch {
     position: absolute; right: -4.5rem; top: 3rem; width: 12.5rem; height: 21rem;
     background: var(--orange); border-radius: 6.25rem 6.25rem 0 0;
@@ -50,7 +50,6 @@ const servicos = (await getCollection('servicos')).sort((a, b) => a.data.order -
     position: relative; z-index: 3; list-style: none; margin: 2rem 0 0; padding: 0.75rem var(--gutter) 1.25rem;
     display: flex; gap: 0.875rem; overflow-x: auto; overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter);
-    scrollbar-width: thin; scrollbar-color: rgba(245, 161, 96, 0.7) transparent;
   }
   .row li { flex: 0 0 15rem; scroll-snap-align: start; display: flex; }
   .row :global(.pass.destaque) { transform: rotate(-2deg) translateY(-4px); }

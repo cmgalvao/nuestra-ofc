@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 // Tarefas seguintes acrescentam caminhos aqui.
-export const PAGES: string[] = ['/404/', '/servicos/', '/', '/contatos/', '/cases/', '/blog/'];
+import { PAGES } from './helpers';
 
 for (const path of PAGES) {
   test(`sem rolagem horizontal em 320px: ${path}`, async ({ page }) => {

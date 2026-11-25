@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://nuestra.com.br',
   trailingSlash: 'always',
-  integrations: [sitemap()],
+  integrations: [sitemap({ filter: (page) => !page.includes('/404') })],
   // Só o build das fixtures de teste (scripts/serve-fixtures.mjs) muda estas duas variáveis.
   outDir: process.env.OUT_DIR ?? './dist',
   cacheDir: process.env.CACHE_DIR ?? './node_modules/.astro',

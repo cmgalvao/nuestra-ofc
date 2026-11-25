@@ -14,7 +14,11 @@ body {
   color: var(--navy);
   background: var(--cream);
   line-height: 1.5;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
 }
+main { flex: 1 0 auto; }
 img, svg { max-width: 100%; height: auto; display: block; }
 h1, h2, h3 { font-family: var(--font-title); margin: 0; }
 p { margin: 0; }
