@@ -41,6 +41,8 @@ test.describe('página 404', () => {
     await page.keyboard.press('Enter');
     await expect(btn).toHaveAttribute('aria-expanded', 'true');
     await expect(page.locator('#menu-principal').getByRole('link', { name: 'Serviços' })).toBeVisible();
+    await page.keyboard.press('Tab');
+    await expect(page.locator('#menu-principal a').first()).toBeFocused();
     await page.keyboard.press('Escape');
     await expect(btn).toHaveAttribute('aria-expanded', 'false');
     await expect(btn).toBeFocused();
