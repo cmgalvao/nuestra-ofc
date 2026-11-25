@@ -1,0 +1,31 @@
+---
+interface Props { numero: number; nome: string; frase: string; href: string; destaque?: boolean }
+const { numero, nome, frase, href, destaque = false } = Astro.props;
+const n = String(numero).padStart(2, '0');
+---
+<a class:list={['pass', { destaque }]} href={href}>
+  <span class="top">CARTÃO DE EMBARQUE · {n}</span>
+  <span class="bd">
+    <span class="k">Destino</span>
+    <span class="v">{nome}</span>
+    <span class="s">{frase}</span>
+  </span>
+  <span class="ft">Embarcar <span class="arr" aria-hidden="true">→</span></span>
+</a>
+<style>
+  .pass {
+    display: flex; flex-direction: column; width: 100%; max-width: 100%; min-height: 15.5rem;
+    background: url('../assets/papel.png') center / cover #f4efe6; color: var(--navy);
+    border-radius: 0.625rem; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); text-decoration: none; overflow: hidden;
+  }
+  .top { background: var(--navy); color: #fff; padding: 0.55rem 0.75rem; font-size: 0.6875rem; letter-spacing: 0.2em; }
+  .destaque .top { background: var(--orange); color: var(--navy); font-weight: 700; }
+  .bd { display: block; flex: 1; padding: 0.75rem; border-bottom: 2px dashed rgba(1, 62, 80, 0.35); }
+  .k { display: block; font-size: 0.6875rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(1, 62, 80, 0.75); }
+  .v { display: block; margin: 0.125rem 0 0.6rem; font-family: var(--font-title); font-weight: 800; font-size: 1.2rem; line-height: 1.1; overflow-wrap: anywhere; }
+  .s { display: block; font-family: var(--font-title); font-style: italic; font-size: 0.875rem; line-height: 1.3; }
+  .ft { padding: 0.6rem 0.75rem; font-size: 0.875rem; font-weight: 600; }
+  .arr { color: var(--orange); font-weight: 700; display: inline-block; transition: transform 0.2s; }
+  .pass:hover .arr, .pass:focus-visible .arr { transform: translateX(4px); }
+  .pass:focus-visible { outline: 3px solid var(--orange-light); outline-offset: 3px; }
+</style>

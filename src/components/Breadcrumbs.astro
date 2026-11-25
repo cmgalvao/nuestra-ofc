@@ -2,7 +2,7 @@
 interface Props { items: { name: string; path: string }[] }
 const { items } = Astro.props;
 ---
-<nav class="breadcrumbs" aria-label="Você está em">
+<nav class="breadcrumbs" aria-label="Caminho">
   <ol>
     <li><a href="/">Home</a></li>
     {items.map((item, i) => (

@@ -14,8 +14,10 @@ interface Props {
   breadcrumbs?: { name: string; path: string }[];
   theme?: 'dark' | 'light';
   noindex?: boolean;
+  /** false quando a página desenha o caminho (ex.: PageHead); o JSON-LD continua sendo emitido. */
+  showBreadcrumbs?: boolean;
 }
-const { title, description, path, breadcrumbs, theme = 'light', noindex } = Astro.props;
+const { title, description, path, breadcrumbs, theme = 'light', noindex, showBreadcrumbs = true } = Astro.props;
 const hasCrumbs = !!breadcrumbs && breadcrumbs.length > 0;
 ---
 <!doctype html>
@@ -29,7 +31,7 @@ const hasCrumbs = !!breadcrumbs && breadcrumbs.length > 0;
   </head>
   <body data-theme={theme}>
     <Header path={path} />
-    {hasCrumbs && <Breadcrumbs items={breadcrumbs!} />}
+    {hasCrumbs && showBreadcrumbs && <Breadcrumbs items={breadcrumbs!} />}
     <main id="conteudo" tabindex="-1"><slot /></main>
     <Footer />
     <StickyCta />

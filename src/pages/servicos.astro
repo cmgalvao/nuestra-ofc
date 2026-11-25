@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHead from '../components/PageHead.astro';
+import ServiceDetail from '../components/ServiceDetail.astro';
+
+const servicos = (await getCollection('servicos')).sort((a, b) => a.data.order - b.data.order);
+const crumbs = [{ name: 'Serviços', path: '/servicos/' }];
+---
+<BaseLayout
+  title="Serviços"
+  description="Identidade visual, gestão de redes sociais, tráfego pago, marketing 360º e jobs pontuais. Escolha um serviço ou voe com a gente em todos."
+  path="/servicos/"
+  breadcrumbs={crumbs}
+  showBreadcrumbs={false}
+>
+  <PageHead
+    title="Serviços"
+    intro="Do primeiro traço ao último clique, cuidamos da comunicação da sua empresa. Escolha um serviço ou voe com a gente em todos."
+    crumbs={crumbs}
+  />
+  <section class="lista">
+    <div class="wrap">
+      {servicos.map((s) => <ServiceDetail servico={s} />)}
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .lista { background: url('../assets/papel.png') center / 30rem #f3efe8; padding: 2rem 1rem 3rem; }
+  .wrap { max-width: 48rem; margin: 0 auto; display: grid; gap: 1.5rem; }
+</style>
