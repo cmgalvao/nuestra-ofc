@@ -83,7 +83,7 @@ const stops = [
   .wrap { max-width: 72rem; margin: 0 auto; padding: 0 1.25rem; }
 
   /* Fundo creme com a textura de papel esticada (sem emendas de ladrilho). */
-  .trecho, .contato { position: relative; isolation: isolate; background: var(--cream); color: var(--navy); }
+  .trecho, .contato { content-visibility: auto; contain-intrinsic-size: auto 30rem; position: relative; isolation: isolate; background: var(--cream); color: var(--navy); }
   .trecho::before, .contato::before {
     content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
     background: url('../assets/papel.webp') center / cover; opacity: 0.55; mix-blend-mode: multiply;

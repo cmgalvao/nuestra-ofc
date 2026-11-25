@@ -47,7 +47,8 @@ function balloonRise() {
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll, { passive: true });
   reduceMotion.addEventListener('change', onScroll);
-  if (window.scrollY > 0) onScroll();
+  // Ler scrollY já na carga força um layout síncrono; no quadro seguinte ele é o mesmo layout da primeira pintura.
+  requestAnimationFrame(() => { if (window.scrollY > 0) onScroll(); });
 }
 
 function altimeter() {
@@ -95,8 +96,21 @@ function carouselDots() {
     }, { passive: true });
     // Telas largas em que os cartões cabem todos: os pontos e a dica de arrastar saem.
     const fits = () => list.toggleAttribute('data-fits', list.scrollWidth <= list.clientWidth + 1);
-    fits();
-    window.addEventListener('resize', fits, { passive: true });
+    // Só mede quando o carrossel chega à tela: com content-visibility nas seções abaixo da dobra,
+    // medir antes forçaria o navegador a montar tudo logo na carga (custo no primeiro layout).
+    const watch = () => {
+      fits();
+      if ('ResizeObserver' in window) new ResizeObserver(fits).observe(list);
+      else window.addEventListener('resize', fits, { passive: true });
+    };
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        io.disconnect();
+        watch();
+      }, { rootMargin: '200px' });
+      io.observe(list);
+    } else watch();
   }
 }
 

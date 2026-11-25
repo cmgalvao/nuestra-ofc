@@ -34,7 +34,7 @@ const servicos = (await getCollection('servicos')).sort((a, b) => a.data.order -
   </div>
 </section>
 <style>
-  .servicos { position: relative; overflow: hidden; background: var(--teal); color: #fff; padding: 4.5rem 0 3rem; }
+  .servicos { content-visibility: auto; contain-intrinsic-size: auto 36rem; position: relative; overflow: hidden; background: var(--teal); color: #fff; padding: 4.5rem 0 3rem; }
   .grain { position: absolute; inset: 0; z-index: 1; pointer-events: none; background-image: var(--grain); opacity: var(--grain-opacity); }
   .arch {
     position: absolute; right: -4.5rem; top: 3rem; width: 12.5rem; height: 21rem;

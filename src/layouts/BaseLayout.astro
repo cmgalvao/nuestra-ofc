@@ -6,6 +6,15 @@ import Footer from '../components/Footer.astro';
 import StickyCta from '../components/StickyCta.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { breadcrumbSchema } from '../lib/seo';
+import jost from '@fontsource-variable/jost/files/jost-latin-wght-normal.woff2?url';
+import bitter400 from '@fontsource/bitter/files/bitter-latin-400-normal.woff2?url';
+import bitter700 from '@fontsource/bitter/files/bitter-latin-700-normal.woff2?url';
+import bitter800 from '@fontsource/bitter/files/bitter-latin-800-normal.woff2?url';
+import bitter400i from '@fontsource/bitter/files/bitter-latin-400-italic.woff2?url';
+import bitter700i from '@fontsource/bitter/files/bitter-latin-700-italic.woff2?url';
+
+// As fontes do site (poucas, só latin) são pedidas junto com o HTML.
+const fontes = [jost, bitter400, bitter700, bitter800, bitter400i, bitter700i];
 
 interface Props {
   title?: string;
@@ -25,6 +34,7 @@ const hasCrumbs = !!breadcrumbs && breadcrumbs.length > 0;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {fontes.map((href) => <link rel="preload" as="font" type="font/woff2" href={href} crossorigin />)}
     <Seo title={title} description={description} path={path} noindex={noindex} />
     {hasCrumbs && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema([{ name: 'Home', path: '/' }, ...breadcrumbs!]))} />}
     <slot name="head" />
