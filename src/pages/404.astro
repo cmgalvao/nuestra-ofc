@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { whatsappUrl } from '../lib/contact';
+---
+<BaseLayout title="Página não encontrada" description="A página que você procurou não existe." path="/404/" theme="dark" noindex>
+  <section class="nf">
+    <h1>Esse voo não existe.</h1>
+    <p>A página que você procurou mudou de rota ou nunca decolou.</p>
+    <p class="actions">
+      <a class="btn primary" href="/">Voltar para a Home</a>
+      <a class="btn" href="/servicos/">Ver serviços</a>
+      <a class="btn" href={whatsappUrl()} target="_blank" rel="noopener">Falar com a Nuestra</a>
+    </p>
+  </section>
+</BaseLayout>
+<style>
+  .nf { max-width: 40rem; margin: 0 auto; padding: 4rem 1.25rem 5rem; }
+  h1 { font-size: clamp(2rem, 8vw, 3.5rem); line-height: 1.1; font-weight: 800; overflow-wrap: anywhere; }
+  p { margin-top: 1rem; font-size: 1.125rem; }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+  .btn { display: inline-block; padding: 0.75rem 1.4rem; border-radius: 999px; border: 1.5px solid var(--orange-light); color: #fff; text-decoration: none; font-weight: 500; }
+  .btn.primary { background: var(--orange-light); color: var(--navy); }
+  .btn:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+</style>

@@ -1,0 +1,71 @@
+---
+import { Image } from 'astro:assets';
+import { NAV } from '../config/site';
+import { whatsappUrl } from '../lib/contact';
+import logo from '../assets/logo-horizontal.png';
+
+interface Props { path: string }
+const { path } = Astro.props;
+const isHome = path === '/';
+const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<header class:list={['site-header', { home: isHome }]}>
+  <div class="bar">
+    <a class="logo" href="/">
+      <Image src={logo} alt="Nuestra Agência" height={36} widths={[120, 240]} sizes="120px" loading="eager" />
+    </a>
+    <button type="button" class="menu-btn" data-menu-toggle aria-expanded="false" aria-controls="menu-principal">Menu</button>
+    <nav id="menu-principal" class="menu" aria-label="Principal">
+      <ul>
+        {NAV.map((item) => (
+          <li>
+            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+      <a class="cta" href={whatsappUrl()} target="_blank" rel="noopener">Falar com a Nuestra</a>
+    </nav>
+  </div>
+</header>
+<script>
+  import '../scripts/menu';
+</script>
+<style>
+  .skip {
+    position: absolute; left: 0.5rem; top: -4rem; z-index: 100;
+    background: var(--orange-light); color: var(--navy); padding: 0.6rem 1rem; border-radius: 0.5rem;
+    font-weight: 500; text-decoration: none;
+  }
+  .skip:focus { top: 0.5rem; }
+  .site-header { background: var(--navy); color: #fff; position: relative; z-index: 30; }
+  .site-header.home { background: transparent; position: absolute; left: 0; right: 0; top: 0; }
+  .bar { max-width: 72rem; margin: 0 auto; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .logo { display: block; line-height: 0; }
+  .logo :global(img) { height: 2.25rem; width: auto; }
+  .menu-btn {
+    font: inherit; font-weight: 500; color: #fff; background: transparent;
+    border: 1.5px solid var(--orange-light); border-radius: 999px; padding: 0.45rem 1.1rem; cursor: pointer;
+    position: relative; z-index: 40;
+  }
+  .menu {
+    display: none; position: fixed; inset: 0; z-index: 35; background: var(--navy);
+    padding: 6rem 1.5rem 2rem; flex-direction: column; justify-content: center; gap: 2rem; overflow-y: auto;
+  }
+  :global(body.menu-open) .menu { display: flex; }
+  :global(body.menu-open) { overflow: hidden; }
+  ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1.25rem; }
+  .menu a { color: #fff; text-decoration: none; }
+  ul a { font-family: var(--font-title); font-size: 2rem; font-weight: 700; }
+  ul a[aria-current='page'] { text-decoration: underline; text-decoration-color: var(--orange-light); text-decoration-thickness: 3px; text-underline-offset: 6px; }
+  .cta { align-self: flex-start; background: var(--orange-light); color: var(--navy) !important; font-weight: 500; padding: 0.8rem 1.4rem; border-radius: 999px; }
+  .menu a:focus-visible, .menu-btn:focus-visible, .logo:focus-visible { outline: 3px solid var(--orange-light); outline-offset: 3px; }
+  @media (min-width: 900px) {
+    .menu-btn { display: none; }
+    .menu { display: flex; position: static; inset: auto; background: transparent; padding: 0; flex-direction: row; align-items: center; gap: 2rem; overflow: visible; }
+    ul { flex-direction: row; gap: 1.75rem; }
+    ul a { font-family: var(--font-body); font-size: 1rem; font-weight: 500; padding-bottom: 0.25rem; }
+    ul a[aria-current='page'] { text-decoration-thickness: 2px; text-underline-offset: 8px; }
+    .cta { align-self: auto; }
+  }
+</style>
