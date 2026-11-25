@@ -1,6 +1,6 @@
 # Prévia do site no GitHub Pages: https://cmgalvao.github.io/nuestra-ofc/
 # Roda a cada envio para o main. A prévia fica fora do Google (noindex) e usa a pasta /nuestra-ofc/.
-# O site oficial (nuestra.com.br) continua sendo gerado na raiz, sem essas variáveis.
+# O site oficial (agencianuestra.com.br) continua sendo gerado na raiz, sem essas variáveis.
 name: Prévia no GitHub Pages
 
 on:

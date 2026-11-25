@@ -110,7 +110,7 @@ Esse comando gera o site e copia o projeto para `G:\Meu Drive\PROJETOS\2026-2027
 
 O código fica em <https://github.com/cmgalvao/nuestra-ofc>. A cada envio para o `main`, o GitHub gera sozinho uma prévia navegável em <https://cmgalvao.github.io/nuestra-ofc/> (arquivo `.github/workflows/pages.yml`).
 
-- A prévia fica fora do Google de propósito, para não competir com o nuestra.com.br quando ele for ao ar.
+- A prévia fica fora do Google de propósito, para não competir com o agencianuestra.com.br quando ele for ao ar.
 - Links internos usam `withBase()` (`src/lib/url.ts`), para funcionarem tanto na prévia (pasta `/nuestra-ofc/`) quanto no site oficial (raiz).
 
 ## O que está pendente
@@ -122,7 +122,7 @@ O código fica em <https://github.com/cmgalvao/nuestra-ofc>. A cada envio para o
 - A animação de abertura "do traço ao balão" (a decisão ainda não foi tomada).
 - Fase de publicação:
   - hospedagem no Netlify;
-  - domínio `nuestra.com.br`;
+  - domínio `agencianuestra.com.br`;
   - Google Analytics, com aviso de cookies;
   - Google Search Console;
   - política de privacidade.

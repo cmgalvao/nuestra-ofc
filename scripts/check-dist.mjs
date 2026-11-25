@@ -3,7 +3,7 @@ import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const DIST = process.env.OUT_DIR ?? 'dist';
-const ORIGIN = 'https://nuestra.com.br/';
+const ORIGIN = 'https://agencianuestra.com.br/';
 // Com BASE_PATH (prévia do GitHub Pages), todo link interno precisa começar pela pasta do site.
 const BASE = (process.env.BASE_PATH ?? '/').replace(/\/?$/, '/');
 const problems = [];

@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://nuestra.com.br',
+  site: 'https://agencianuestra.com.br',
   // Prévia no GitHub Pages: BASE_PATH=/nuestra-ofc/ (ver .github/workflows/pages.yml). Site oficial: raiz.
   base: process.env.BASE_PATH ?? '/',
   trailingSlash: 'always',

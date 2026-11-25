@@ -10,7 +10,7 @@ interface Props {
   noindex?: boolean;
 }
 const { title, description, path, noindex = false } = Astro.props;
-// Na prévia do GitHub Pages (PREVIEW=1) nenhuma página entra no Google, para não competir com nuestra.com.br.
+// Na prévia do GitHub Pages (PREVIEW=1) nenhuma página entra no Google, para não competir com agencianuestra.com.br.
 const hide = noindex || process.env.PREVIEW === '1';
 const fullTitle = pageTitle(title);
 const url = canonicalUrl(path);

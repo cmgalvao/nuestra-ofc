@@ -6,8 +6,8 @@ describe('seo', () => {
     expect(pageTitle('Serviços')).toBe('Serviços | Nuestra Agência');
   });
   it('canonical absoluto', () => {
-    expect(canonicalUrl('/servicos/')).toBe('https://nuestra.com.br/servicos/');
-    expect(canonicalUrl('/')).toBe('https://nuestra.com.br/');
+    expect(canonicalUrl('/servicos/')).toBe('https://agencianuestra.com.br/servicos/');
+    expect(canonicalUrl('/')).toBe('https://agencianuestra.com.br/');
   });
   it('schema local sem endereço de rua', () => {
     const s: any = localBusinessSchema();
@@ -22,6 +22,6 @@ describe('seo', () => {
   it('breadcrumb com posições e URLs absolutas', () => {
     const b: any = breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'Serviços', path: '/servicos/' }]);
     expect(b['@type']).toBe('BreadcrumbList');
-    expect(b.itemListElement[1]).toEqual({ '@type': 'ListItem', position: 2, name: 'Serviços', item: 'https://nuestra.com.br/servicos/' });
+    expect(b.itemListElement[1]).toEqual({ '@type': 'ListItem', position: 2, name: 'Serviços', item: 'https://agencianuestra.com.br/servicos/' });
   });
 });
