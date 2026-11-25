@@ -1,16 +1,123 @@
 ---
----
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Altimeter from '../components/Altimeter.astro';
+import Hero from '../components/Hero.astro';
+import ServicesCarousel from '../components/ServicesCarousel.astro';
+import { whatsappUrl } from '../lib/contact';
+import { optionalCollection } from '../lib/optional-collection';
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+// Trechos de Cases e Blog: só aparecem quando a coleção tem itens (até 3, do mais recente).
+const porData = <T extends { data: { data: Date } }>(a: T, b: T) => b.data.data.getTime() - a.data.data.getTime();
+const cases = (await optionalCollection('cases')).sort(porData).slice(0, 3);
+const posts = (await optionalCollection('blog')).sort(porData).slice(0, 3);
+const dataBR = (d: Date) => d.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+
+const stops = [
+  { id: 'decolagem', label: 'Home' },
+  { id: 'servicos', label: 'Serviços' },
+  { id: 'contato', label: 'Contato' },
+];
+---
+<BaseLayout
+  description="Do primeiro traço ao último clique, cuidamos da comunicação da sua empresa: identidade visual, redes sociais, tráfego pago e marketing 360º em Santa Maria/RS."
+  path="/"
+  theme="dark"
+>
+  <div class="voo">
+    <Altimeter stops={stops} />
+    <Hero />
+    <ServicesCarousel />
+
+    {cases.length > 0 && (
+      <section class="trecho" id="cases" aria-labelledby="cases-titulo">
+        <div class="wrap">
+          <h2 id="cases-titulo">Marcas que ajudamos a decolar.</h2>
+          <ul class="grade" role="list">
+            {cases.map((c) => (
+              <li>
+                <a class="item" href={`/cases/${c.id}/`}>
+                  <Image src={c.data.capa} alt="" widths={[320, 640]} sizes="(min-width: 900px) 22rem, 100vw" />
+                  <span class="t">{c.data.titulo}</span>
+                  <span class="m">{c.data.cliente}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <a class="todos" href="/cases/">Ver todos os cases <span aria-hidden="true">→</span></a>
+        </div>
+      </section>
+    )}
+
+    {posts.length > 0 && (
+      <section class="trecho" id="blog" aria-labelledby="blog-titulo">
+        <div class="wrap">
+          <h2 id="blog-titulo">Visão de cima.</h2>
+          <ul class="grade" role="list">
+            {posts.map((p) => (
+              <li>
+                <a class="item" href={`/blog/${p.id}/`}>
+                  <Image src={p.data.capa} alt={p.data.capaAlt} widths={[320, 640]} sizes="(min-width: 900px) 22rem, 100vw" />
+                  <span class="t">{p.data.titulo}</span>
+                  <span class="m"><time datetime={p.data.data.toISOString().slice(0, 10)}>{dataBR(p.data.data)}</time></span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <a class="todos" href="/blog/">Ver todos os posts <span aria-hidden="true">→</span></a>
+        </div>
+      </section>
+    )}
+
+    <section id="contato" class="contato" aria-labelledby="contato-titulo">
+      <div class="wrap">
+        <h2 id="contato-titulo">Vamos <b>decolar</b> juntos?</h2>
+        <p>Conte um pouco sobre o seu negócio e o que você quer alcançar. A gente responde com o melhor caminho para chegar lá.</p>
+        <a class="btn" href={whatsappUrl()} target="_blank" rel="noopener">Falar com a Nuestra</a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+<style>
+  .voo { position: relative; }
+  .wrap { max-width: 72rem; margin: 0 auto; padding: 0 1.25rem; }
+
+  /* Fundo creme com a textura de papel esticada (sem emendas de ladrilho). */
+  .trecho, .contato { position: relative; isolation: isolate; background: var(--cream); color: var(--navy); }
+  .trecho::before, .contato::before {
+    content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background: url('../assets/papel.png') center / cover; opacity: 0.55; mix-blend-mode: multiply;
+  }
+  .trecho { padding: 3.5rem 0; }
+  .trecho + .trecho { padding-top: 0; }
+  .trecho h2 { font-weight: 800; font-size: clamp(1.6rem, 1.2rem + 2vw, 2.4rem); line-height: 1.1; }
+  .grade { list-style: none; margin: 1.75rem 0 0; padding: 0; display: grid; gap: 1.25rem; }
+  .item { display: flex; flex-direction: column; gap: 0.35rem; color: inherit; text-decoration: none; }
+  .item :global(img) { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 0.625rem; box-shadow: 0 6px 18px rgba(1, 62, 80, 0.15); margin-bottom: 0.4rem; }
+  .item .t { font-family: var(--font-title); font-weight: 700; font-size: 1.15rem; line-height: 1.2; }
+  .item .m { font-size: 0.875rem; opacity: 0.8; }
+  .item:hover .t { text-decoration: underline; text-decoration-color: var(--orange); }
+  .todos { display: inline-block; margin-top: 1.5rem; color: var(--navy); font-weight: 600; }
+  .item:focus-visible, .todos:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+
+  .contato { padding: 4rem 0 4.5rem; text-align: center; }
+  .contato .wrap::before {
+    content: ''; display: block; width: 2.25rem; height: 3.25rem; margin: 0 auto 1.25rem;
+    background: url('../assets/balao-traco.png') center / contain no-repeat;
+  }
+  .contato h2 { font-weight: 400; font-size: clamp(2rem, 1.3rem + 3.2vw, 3.25rem); line-height: 1.08; }
+  .contato h2 b { font-weight: 800; color: var(--teal); }
+  .contato p { margin: 1rem auto 0; max-width: 32rem; font-size: 1.0625rem; line-height: 1.5; }
+  .btn {
+    display: inline-block; margin-top: 1.75rem; padding: 0.9rem 1.6rem; border-radius: 999px;
+    background: var(--orange-light); color: var(--navy); font-weight: 500; text-decoration: none;
+    box-shadow: 0 6px 16px rgba(1, 62, 80, 0.2); transition: background-color 0.2s;
+  }
+  .btn:hover { background: #f8b47e; }
+  .btn:focus-visible { outline: 3px solid var(--navy); outline-offset: 3px; }
+  @media (min-width: 900px) {
+    .wrap { padding: 0 2.75rem; }
+    .grade { grid-template-columns: repeat(3, 1fr); }
+    .contato { padding: 6rem 0; }
+  }
+</style>

@@ -1,0 +1,50 @@
+---
+/**
+ * Régua de altitude: marcas discretas na lateral direita, com o rótulo só do trecho atual.
+ * O estado vem de `data-current` (atualizado por src/scripts/hero-motion.ts).
+ * Deve ficar dentro de um contêiner com `position: relative` que envolva os trechos:
+ * a régua acompanha a rolagem (sticky) e some quando o último trecho termina.
+ */
+interface Props { stops: { id: string; label: string }[] }
+const { stops } = Astro.props;
+const first = stops[0]?.id;
+const last = Math.max(stops.length - 1, 1);
+---
+<div class="altimeter" data-altimeter data-current={first} aria-hidden="true">
+  <div class="rail">
+    <ol>
+      {stops.map((s, i) => (
+        <li data-stop={s.id} data-active={s.id === first ? '' : undefined} style={`--pos: ${(i / last) * 100}%`}>
+          <span class="mark"></span>
+          <span class="label" data-label>{s.label}</span>
+        </li>
+      ))}
+    </ol>
+  </div>
+</div>
+<style>
+  .altimeter { position: absolute; top: 0; bottom: 0; right: 0; width: 0; z-index: 25; pointer-events: none; }
+  .rail {
+    position: sticky; top: 44svh; margin-top: 44svh; margin-bottom: 3.5rem; height: 30svh;
+    width: 2px; margin-left: -1rem; background: rgba(150, 175, 178, 0.55);
+  }
+  ol { list-style: none; margin: 0; padding: 0; position: absolute; inset: 0; }
+  li { position: absolute; top: var(--pos); right: 0; width: 0; height: 0; }
+  .mark {
+    position: absolute; right: -5px; top: -1px; width: 10px; height: 2px;
+    background: rgba(170, 195, 198, 0.85);
+  }
+  [data-active] .mark {
+    right: -8px; top: -10px; width: 14px; height: 20px; background: url('../assets/balao-traco.png') center / contain no-repeat;
+  }
+  .label {
+    display: none; position: absolute; right: 12px; top: -0.65rem; white-space: nowrap;
+    font-size: 0.625rem; line-height: 1; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--orange-light); background: rgba(1, 62, 80, 0.78); padding: 0.3rem 0.45rem; border-radius: 999px;
+  }
+  [data-active] .label { display: block; }
+  @media (min-width: 900px) {
+    .rail { top: 30svh; margin-top: 30svh; height: 44svh; margin-left: -1.9rem; }
+    .label { font-size: 0.6875rem; right: 16px; }
+  }
+</style>
