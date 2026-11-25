@@ -29,11 +29,18 @@ test.describe('página 404', () => {
     await expect(acoes.locator('a[href="/contatos/"]')).toHaveCount(1);
   });
 
-  test('CTA fixo só no celular', async ({ page }, info) => {
-    const cta = page.locator('.sticky-cta a', { hasText: 'Falar com a Nuestra' });
+  test('botão de WhatsApp no cabeçalho só no celular, e nada fixo no rodapé', async ({ page }, info) => {
+    const cta = page.locator('.cta-topo');
+    await expect(page.locator('.sticky-cta')).toHaveCount(0);
     if (info.project.name === 'mobile') {
       await expect(cta).toBeVisible();
       expect(await cta.getAttribute('href')).toMatch(/^https:\/\/wa\.me\/5555991932679\?text=/);
+      // Ao lado do Menu e rola junto com o cabeçalho (não fica preso na tela).
+      await page.mouse.wheel(0, 1500);
+      await expect(cta).not.toBeInViewport();
+      await page.evaluate(() => scrollTo(0, 0));
+      await page.getByRole('button', { name: 'Menu' }).click();
+      await expect(cta).toBeHidden();
     } else {
       await expect(cta).toBeHidden();
     }
@@ -50,9 +57,9 @@ test.describe('página 404', () => {
     await expect(page.locator('#menu-principal').getByRole('link', { name: 'Serviços' })).toBeVisible();
     await page.keyboard.press('Tab');
     await expect(page.locator('#menu-principal a').first()).toBeFocused();
-    // Tab além do último item do menu nunca cai no conteúdo coberto (main, rodapé, CTA fixo, logo...).
+    // Tab além do último item do menu nunca cai no conteúdo coberto (main, rodapé, logo...).
     const dentro = () =>
-      page.evaluate(() => !document.activeElement?.closest('main, footer, .sticky-cta, .breadcrumbs, .skip, .logo'));
+      page.evaluate(() => !document.activeElement?.closest('main, footer, .breadcrumbs, .skip, .logo'));
     await page.locator('#menu-principal a').last().focus();
     for (let i = 0; i < 4; i++) {
       await page.keyboard.press('Tab');
