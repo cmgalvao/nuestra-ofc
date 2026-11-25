@@ -5,6 +5,9 @@ import { SITE, NAV } from '../config/site';
 import { mailtoUrl, whatsappUrl } from '../lib/contact';
 import logo from '../assets/logo-horizontal.png';
 import Icon from './Icon.astro';
+import { analyticsEnabled } from '../lib/consent';
+
+const cookiesAtivos = analyticsEnabled(import.meta.env.PUBLIC_GA_ID as string | undefined, process.env.PREVIEW);
 ---
 <footer class="site-footer">
   <div class="inner">
@@ -22,7 +25,10 @@ import Icon from './Icon.astro';
       <li><a href={whatsappUrl()} target="_blank" rel="noopener"><Icon name="whatsapp" /> {SITE.whatsappDisplay}</a></li>
       <li class="place"><Icon name="pin" /> {SITE.cityDisplay}</li>
     </ul>
-    <p class="copy">© {new Date().getFullYear()} {SITE.name}</p>
+    <p class="copy">
+      © {new Date().getFullYear()} {SITE.name}
+      {cookiesAtivos && <button type="button" class="cookies" data-open-cookies>Cookies</button>}
+    </p>
   </div>
 </footer>
 <style>
@@ -35,6 +41,8 @@ import Icon from './Icon.astro';
   a { color: #fff; text-decoration: none; }
   a:hover { text-decoration: underline; text-decoration-color: var(--orange-light); }
   a:focus-visible { outline: 3px solid var(--orange-light); outline-offset: 3px; }
+  .cookies { font: inherit; color: #fff; background: none; border: 0; padding: 0; margin-left: 1rem; text-decoration: underline; text-decoration-color: var(--orange-light); cursor: pointer; }
+  .cookies:focus-visible { outline: 3px solid var(--orange-light); outline-offset: 3px; }
   .contacts { display: grid; gap: 0.6rem; }
   .contacts li { display: flex; align-items: center; gap: 0.5rem; overflow-wrap: anywhere; }
   .contacts a { display: inline-flex; align-items: center; gap: 0.5rem; }

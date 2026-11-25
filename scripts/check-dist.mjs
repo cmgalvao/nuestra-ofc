@@ -56,6 +56,10 @@ for (const file of pages) {
 
   if (/flower/i.test(html)) bad('referencia "flower"');
 
+  // O GA só entra pelo script, depois do aceite: o HTML nunca pode apontar para o Google.
+  if (/googletagmanager\.com/.test(html)) bad('HTML referencia googletagmanager.com (o GA só carrega após o aceite)');
+  if (process.env.PREVIEW === '1' && /cookie-banner/.test(html)) bad('prévia com aviso de cookies');
+
   for (const m of html.matchAll(/<script\b([^>]*)>/g)) {
     const attrs = m[1];
     if (/\ssrc=/.test(attrs)) continue;

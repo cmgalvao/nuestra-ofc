@@ -17,15 +17,27 @@ export default defineConfig({
       reuseExistingServer: true,
       timeout: 180_000,
     },
+    {
+      // Site com ID de GA4 FICTÍCIO, só para o aviso de cookies (dist-ga).
+      command: 'node scripts/serve-ga.mjs',
+      url: 'http://localhost:4324/',
+      reuseExistingServer: true,
+      timeout: 180_000,
+    },
   ],
   use: { baseURL: 'http://localhost:4323' },
   projects: [
-    { name: 'mobile', testIgnore: /fixtures.spec/, use: { ...devices['Desktop Chrome'], viewport: { width: 375, height: 812 } } },
-    { name: 'desktop', testIgnore: /fixtures.spec/, use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } } },
+    { name: 'mobile', testIgnore: /(fixtures|cookies).spec/, use: { ...devices['Desktop Chrome'], viewport: { width: 375, height: 812 } } },
+    { name: 'desktop', testIgnore: /(fixtures|cookies).spec/, use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } } },
     {
       name: 'fixtures',
       testMatch: /fixtures.spec/,
       use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 }, baseURL: 'http://localhost:4322' },
+    },
+    {
+      name: 'cookies',
+      testMatch: /cookies.spec/,
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 }, baseURL: 'http://localhost:4324' },
     },
   ],
 });

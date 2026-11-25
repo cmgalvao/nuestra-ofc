@@ -23,7 +23,7 @@ if (build.status !== 0) {
 console.log('2/2 Copiando para o Drive...');
 const pastasIgnoradas = [
   'node_modules', '.astro', 'test-results', 'playwright-report',
-  'lighthouse', '.superpowers', 'dist-fixtures', 'dist-pages',
+  'lighthouse', '.superpowers', 'dist-fixtures', 'dist-ga', 'dist-pages',
 ];
 const copia = spawnSync(
   'robocopy',
