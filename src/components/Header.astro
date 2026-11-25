@@ -20,6 +20,7 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
       <a class="cta-topo" href={whatsappUrl()} target="_blank" rel="noopener" aria-label="Falar com a Nuestra no WhatsApp">WhatsApp</a>
       <button type="button" class="menu-btn" data-menu-toggle aria-expanded="false" aria-controls="menu-principal">Menu</button>
     </div>
+    <div class="scrim" data-menu-scrim aria-hidden="true"></div>
     <nav id="menu-principal" class="menu" aria-label="Principal">
       <ul>
         {NAV.map((item) => (
@@ -61,24 +62,36 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
     border: 1.5px solid var(--orange-light); border-radius: 999px; padding: 0.45rem 1.1rem; cursor: pointer;
     position: relative; z-index: 40;
   }
-  .menu {
-    display: none; position: fixed; inset: 0; z-index: 35; background: var(--navy);
-    padding: 6rem 1.5rem 2rem; flex-direction: column; justify-content: center; gap: 2rem; overflow-y: auto;
+  /* Celular: gaveta que desliza da direita, só do tamanho dos itens; a página fica visível (escurecida) atrás. */
+  .scrim {
+    position: fixed; inset: 0; z-index: 34; background: rgba(1, 30, 40, 0.55);
+    opacity: 0; visibility: hidden; transition: opacity 0.25s, visibility 0s 0.25s;
   }
-  :global(body.menu-open) .menu { display: flex; }
+  :global(body.menu-open) .scrim { opacity: 1; visibility: visible; transition: opacity 0.25s; }
+  .menu {
+    position: fixed; top: 0; right: 0; bottom: 0; z-index: 35; width: min(78vw, 18rem); background: var(--navy);
+    padding: 5.5rem 1.5rem calc(1.5rem + env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 1.5rem; overflow-y: auto;
+    box-shadow: -10px 0 28px rgba(0, 0, 0, 0.3);
+    transform: translateX(100%); visibility: hidden; transition: transform 0.28s ease, visibility 0s 0.28s;
+  }
+  :global(body.menu-open) .menu { transform: none; visibility: visible; transition: transform 0.28s ease; }
+  @media (prefers-reduced-motion: reduce) {
+    .scrim, .menu, :global(body.menu-open) .scrim, :global(body.menu-open) .menu { transition: none; }
+  }
   :global(body.menu-open) { overflow: hidden; }
   ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1.25rem; }
   .menu a { color: #fff; text-decoration: none; }
-  ul a { font-family: var(--font-title); font-size: 2rem; font-weight: 700; }
+  ul a { font-family: var(--font-title); font-size: 1.6rem; font-weight: 700; }
   ul a[aria-current='page'] { text-decoration: underline; text-decoration-color: var(--orange-light); text-decoration-thickness: 3px; text-underline-offset: 6px; }
-  .cta { align-self: flex-start; background: var(--orange-light); color: var(--navy) !important; font-weight: 500; padding: 0.8rem 1.4rem; border-radius: 999px; }
+  .cta { margin-top: auto; align-self: stretch; text-align: center; background: var(--orange-light); color: var(--navy) !important; font-weight: 500; padding: 0.8rem 1.4rem; border-radius: 999px; }
   .menu a:focus-visible, .menu-btn:focus-visible, .logo:focus-visible { outline: 3px solid var(--orange-light); outline-offset: 3px; }
   @media (min-width: 900px) {
     .acoes { display: none; }
-    .menu { display: flex; position: static; inset: auto; background: transparent; padding: 0; flex-direction: row; align-items: center; gap: 2rem; overflow: visible; }
+    .scrim { display: none; }
+    .menu { position: static; width: auto; transform: none; visibility: visible; box-shadow: none; transition: none; background: transparent; padding: 0; flex-direction: row; align-items: center; gap: 2rem; overflow: visible; }
     ul { flex-direction: row; gap: 1.75rem; }
     ul a { font-family: var(--font-body); font-size: 1rem; font-weight: 500; padding-bottom: 0.25rem; }
     ul a[aria-current='page'] { text-decoration-thickness: 2px; text-underline-offset: 8px; }
-    .cta { align-self: auto; }
+    .cta { margin-top: 0; align-self: auto; text-align: left; }
   }
 </style>

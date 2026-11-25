@@ -46,6 +46,20 @@ test.describe('página 404', () => {
     }
   });
 
+  test('menu é uma gaveta pela direita, não cobre a tela, e fecha ao tocar fora', async ({ page }, info) => {
+    test.skip(info.project.name !== 'mobile', 'só celular');
+    await page.getByRole('button', { name: 'Menu' }).click();
+    const gaveta = page.locator('#menu-principal');
+    await expect(gaveta).toBeVisible();
+    const box = (await gaveta.boundingBox())!;
+    const vw = page.viewportSize()!.width;
+    expect(box.width).toBeLessThan(vw * 0.85);
+    await expect.poll(async () => Math.round((await gaveta.boundingBox())!.x + box.width)).toBe(vw);
+    await page.mouse.click(10, 300);
+    await expect(page.getByRole('button', { name: 'Menu' })).toHaveAttribute('aria-expanded', 'false');
+    await expect(gaveta).toBeHidden();
+  });
+
   test('teclado: pular, abrir e fechar menu', async ({ page }, info) => {
     test.skip(info.project.name !== 'mobile', 'só celular');
     await page.keyboard.press('Tab');

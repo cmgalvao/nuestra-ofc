@@ -24,6 +24,8 @@ if (button && nav) {
     }
   });
 
+  document.querySelector('[data-menu-scrim]')?.addEventListener('click', () => setOpen(false));
+
   nav.addEventListener('click', (event) => {
     if ((event.target as HTMLElement).closest('a')) setOpen(false);
   });
