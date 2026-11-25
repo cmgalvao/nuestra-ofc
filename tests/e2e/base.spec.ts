@@ -22,6 +22,13 @@ test.describe('página 404', () => {
     await expect(footer.locator('a[href^="mailto:nuestraoficial@gmail.com"]')).toHaveCount(1);
   });
 
+  test('links para Home, Serviços e Contatos', async ({ page }) => {
+    const acoes = page.locator('.nf .actions');
+    await expect(acoes.locator('a[href="/"]')).toHaveCount(1);
+    await expect(acoes.locator('a[href="/servicos/"]')).toHaveCount(1);
+    await expect(acoes.locator('a[href="/contatos/"]')).toHaveCount(1);
+  });
+
   test('CTA fixo só no celular', async ({ page }, info) => {
     const cta = page.locator('.sticky-cta a', { hasText: 'Falar com a Nuestra' });
     if (info.project.name === 'mobile') {
@@ -43,7 +50,20 @@ test.describe('página 404', () => {
     await expect(page.locator('#menu-principal').getByRole('link', { name: 'Serviços' })).toBeVisible();
     await page.keyboard.press('Tab');
     await expect(page.locator('#menu-principal a').first()).toBeFocused();
+    // Tab além do último item do menu nunca cai no conteúdo coberto (main, rodapé, CTA fixo, logo...).
+    const dentro = () =>
+      page.evaluate(() => !document.activeElement?.closest('main, footer, .sticky-cta, .breadcrumbs, .skip, .logo'));
+    await page.locator('#menu-principal a').last().focus();
+    for (let i = 0; i < 4; i++) {
+      await page.keyboard.press('Tab');
+      expect(await dentro()).toBe(true);
+    }
+    for (let i = 0; i < 8; i++) {
+      await page.keyboard.press('Shift+Tab');
+      expect(await dentro()).toBe(true);
+    }
     await page.keyboard.press('Escape');
+    await expect(page.locator('main')).not.toHaveAttribute('inert', '');
     await expect(btn).toHaveAttribute('aria-expanded', 'false');
     await expect(btn).toBeFocused();
   });
