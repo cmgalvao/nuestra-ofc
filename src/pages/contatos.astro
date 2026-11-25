@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ContactList from '../components/ContactList.astro';
+import { whatsappUrl } from '../lib/contact';
+
+const crumbs = [{ name: 'Contatos', path: '/contatos/' }];
+---
+<BaseLayout
+  title="Contatos"
+  description="Vamos decolar juntos? Fale com a Nuestra pelo WhatsApp, e-mail ou Instagram. Santa Maria | RS."
+  path="/contatos/"
+  breadcrumbs={crumbs}
+  showBreadcrumbs={false}
+  theme="dark"
+>
+  <section class="ceu">
+    <div class="grain" aria-hidden="true"></div>
+    <div class="inner">
+      <div class="trail"><Breadcrumbs items={crumbs} /></div>
+      <h1>Vamos <b>decolar</b> juntos?</h1>
+      <p class="sub">Conte um pouco sobre o seu negócio e o que você quer alcançar. A gente responde com o melhor caminho para chegar lá.</p>
+      <div class="lista"><ContactList /></div>
+      <a class="btn" href={whatsappUrl()} target="_blank" rel="noopener">Falar com a Nuestra</a>
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .ceu { position: relative; overflow: hidden; color: #fff; background: var(--sky-gradient); min-height: 80vh; min-height: 80svh; }
+  .grain { position: absolute; inset: 0; z-index: 1; pointer-events: none; background-image: var(--grain); opacity: var(--grain-opacity); mix-blend-mode: overlay; }
+  .inner { position: relative; z-index: 2; max-width: 72rem; margin: 0 auto; padding: 0.5rem 1.25rem 3rem; }
+  .trail :global(.breadcrumbs) { padding: 0.75rem 0; font-size: 0.625rem; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.8; }
+  .trail :global(ol) { margin: 0; }
+  h1 { margin-top: 0.5rem; font-weight: 400; font-size: clamp(2rem, 1.3rem + 3.2vw, 3.5rem); line-height: 1.08; letter-spacing: -0.01em; text-wrap: balance; }
+  h1 b { font-weight: 800; color: var(--orange-light); }
+  .sub { margin-top: 1rem; max-width: 32rem; font-size: 1rem; line-height: 1.5; }
+  .lista { margin-top: 1.5rem; max-width: 32rem; }
+  .btn {
+    display: inline-block; margin-top: 1.75rem; padding: 0.9rem 1.6rem; border-radius: 999px;
+    background: var(--orange-light); color: var(--navy); font-weight: 500; text-decoration: none;
+    box-shadow: 0 6px 16px rgba(1, 30, 40, 0.3); transition: background-color 0.2s;
+  }
+  .btn:hover { background: #f8b47e; }
+  .btn:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+  /* No celular o CTA fixo (StickyCta) faz o papel deste botão. */
+  @media (max-width: 899.98px) { .btn { display: none; } }
+  @media (min-width: 900px) {
+    .inner { padding: 1rem 2.75rem 5rem; }
+    .sub { font-size: 1.1875rem; }
+  }
+</style>

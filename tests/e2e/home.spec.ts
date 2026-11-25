@@ -1,23 +1,8 @@
 import { test, expect, type Locator, type Page } from '@playwright/test';
 import { SITE, NAV } from '../../src/config/site';
+import { countAsset } from './helpers';
 
 const SLUGS = ['identidade-visual', 'gestao-de-redes-sociais', 'trafego-pago', 'marketing-360', 'jobs-pontuais'];
-
-/** Imagens (<img>) e fundos CSS dentro de `root` cuja origem contém `nome`. */
-async function countAsset(root: Locator, nome: string) {
-  return root.evaluate((el, n) => {
-    const all = [el, ...Array.from(el.querySelectorAll('*'))];
-    let imgs = 0;
-    let fundos = 0;
-    for (const node of all) {
-      if (node instanceof HTMLImageElement && (node.currentSrc || node.src).includes(n)) imgs++;
-      for (const pseudo of [null, '::before', '::after']) {
-        if (getComputedStyle(node, pseudo).backgroundImage.includes(n)) fundos++;
-      }
-    }
-    return { imgs, fundos };
-  }, nome);
-}
 
 const transformOf = (loc: Locator) => loc.evaluate((el) => getComputedStyle(el).transform);
 const scrollTo = (page: Page, y: number) => page.evaluate((top) => window.scrollTo({ top, behavior: 'instant' }), y);
