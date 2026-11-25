@@ -1,43 +1,122 @@
-# Astro Starter Kit: Minimal
+# Site da Nuestra
 
-```sh
-npm create astro@latest -- --template minimal
+Este é o código do site da agência Nuestra. Este guia explica, em linguagem simples, como ver o site no computador e onde ficam os textos.
+
+O código fica em `C:\Projetos\nuestra-site`. A cópia no Google Drive é só um backup (veja "Guardar uma cópia no Drive").
+
+## Como abrir o site no computador
+
+1. Abra o terminal dentro da pasta `C:\Projetos\nuestra-site`.
+2. Só na primeira vez (ou depois de baixar o projeto de novo), instale as peças que o site usa:
+   ```
+   npm install
+   ```
+3. Ligue o site de teste:
+   ```
+   npm run dev
+   ```
+4. Abra no navegador: <http://localhost:4321>
+
+O site de teste só existe no seu computador. Para desligar, volte ao terminal e aperte `Ctrl + C`.
+
+## Onde ficam os textos
+
+Os textos ficam em arquivos simples, dentro de `src/content`. Cada arquivo começa com um bloco entre duas linhas `---` (os "campos") e, depois dele, o texto livre.
+
+### Serviços — `src/content/servicos`
+
+Há um arquivo por serviço. Campos:
+
+- `order`: posição do serviço na lista (1, 2, 3...).
+- `slug`: nome usado no endereço da página, sem espaços nem acentos.
+- `nome`: nome do serviço.
+- `frase`: frase curta de destaque.
+- `entregas`: lista do que está incluído no serviço.
+
+### Cases — `src/content/cases`
+
+Um arquivo `.md` por case. A pasta está vazia por enquanto. Enquanto não houver nenhum arquivo, o site mostra a mensagem de "sem conteúdo ainda". Campos:
+
+- `titulo`: título do case.
+- `cliente`: nome do cliente.
+- `capa`: imagem principal do case.
+- `imagens`: lista de imagens do case.
+- `descricao`: resumo curto.
+- `desafio`: qual era o problema (opcional).
+- `solucao`: o que foi feito (opcional).
+- `resultado`: o que foi alcançado (opcional).
+- `data`: data do projeto, no formato `2026-12-31`.
+
+Modelo de um arquivo (exemplo apenas, os valores abaixo são inventados para mostrar o formato; troque tudo pelos dados reais):
+
+```
+---
+titulo: "EXEMPLO — título do case"
+cliente: "EXEMPLO — nome do cliente"
+capa: "../../assets/exemplo-capa.jpg"
+imagens:
+  - "../../assets/exemplo-1.jpg"
+descricao: "EXEMPLO — resumo em uma ou duas frases."
+data: 2026-12-31
+---
+
+Texto livre do case, se quiser.
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+As imagens precisam estar na pasta `src/assets`, e o caminho é escrito a partir do arquivo do case.
 
-## 🚀 Project Structure
+### Blog — `src/content/blog`
 
-Inside of your Astro project, you'll see the following folders and files:
+Um arquivo `.md` por post. Também está vazia por enquanto. Campos:
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+- `titulo`: título do post.
+- `descricao`: resumo curto (aparece nas listas e no Google).
+- `capa`: imagem de capa.
+- `capaAlt`: descrição da imagem de capa, para quem não consegue vê-la.
+- `data`: data de publicação, no formato `2026-12-31`.
+- `autor`: nome de quem escreveu.
+
+Modelo (exemplo apenas, valores inventados):
+
+```
+---
+titulo: "EXEMPLO — título do post"
+descricao: "EXEMPLO — resumo do post."
+capa: "../../assets/exemplo-capa.jpg"
+capaAlt: "EXEMPLO — descrição da imagem"
+data: 2026-12-31
+autor: "EXEMPLO — nome do autor"
+---
+
+Texto do post.
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Se algum campo obrigatório faltar, o `npm run dev` mostra um aviso dizendo qual.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Guardar uma cópia no Drive
 
-Any static assets, like images, can be placed in the `public/` directory.
+```
+npm run copy:drive
+```
 
-## 🧞 Commands
+Esse comando gera o site e copia o projeto para `G:\Meu Drive\PROJETOS\2026-2027 SITES\NUESTRA\Site\Site Inicial\nuestra-site`. No final aparece "Cópia concluída". Lembrete: o código de verdade mora em `C:\Projetos\nuestra-site`; a cópia no Drive é um backup e é sobrescrita a cada vez. Não edite os arquivos por lá.
 
-All commands are run from the root of the project, from a terminal:
+## O que está pendente
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+- Página Sobre.
+- Perguntas frequentes.
+- Avaliações de clientes.
+- Prazo de resposta (quanto tempo a agência leva para responder um contato).
+- A animação de abertura "do traço ao balão" (a decisão ainda não foi tomada).
+- Fase de publicação:
+  - hospedagem no Netlify;
+  - domínio `nuestra.com.br`;
+  - Google Analytics, com aviso de cookies;
+  - Google Search Console;
+  - política de privacidade.
 
-## 👀 Want to learn more?
+## Testes (para quem for mexer no código)
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- `npm test`: testes rápidos de partes do código.
+- `npm run test:e2e`: abre o site num navegador automático e confere as páginas, no celular e no computador.
+- `npm run check:dist`: confere o site gerado (títulos, endereços, mapa do site etc.).
