@@ -70,3 +70,14 @@ for (const path of ['/cases/', '/blog/', '/cases/exemplo-completo/', '/blog/exem
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
   });
 }
+
+test.describe('Cases e Blog com conteúdo ficam indexáveis (fixtures FICTÍCIAS)', () => {
+  for (const rota of ['/cases/', '/blog/']) {
+    test(`${rota} sem noindex e dentro do sitemap`, async ({ page, request }) => {
+      await page.goto(rota);
+      await expect(page.locator('meta[name=robots]')).toHaveCount(0);
+      const sitemap = await (await request.get('/sitemap-0.xml')).text();
+      expect(sitemap).toContain(`agencianuestra.com.br${rota}`);
+    });
+  }
+});

@@ -63,3 +63,15 @@ test('Home sem conteúdo não linka Cases nem Blog fora do menu e do rodapé', a
   await expect(page.locator('main a[href^="/cases/"], main a[href^="/blog/"]')).toHaveCount(0);
   await expect(page.locator('#cases, #blog')).toHaveCount(0);
 });
+
+test.describe('Cases e Blog vazios ficam fora do Google (build padrão)', () => {
+  for (const rota of ['/cases/', '/blog/']) {
+    test(`${rota} tem noindex e não está no sitemap`, async ({ page, request }) => {
+      await page.goto(rota);
+      await expect(page.locator('meta[name=robots]')).toHaveAttribute('content', 'noindex');
+      const sitemap = await (await request.get('/sitemap-0.xml')).text();
+      expect(sitemap).not.toContain(`agencianuestra.com.br${rota}`);
+      expect(sitemap).toContain('agencianuestra.com.br/servicos/');
+    });
+  }
+});

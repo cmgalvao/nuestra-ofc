@@ -69,6 +69,21 @@ for (const f of files.filter((f) => /sitemap.*\.xml$/.test(f))) {
   if (/<loc>[^<]*\/404\/?<\/loc>/.test(readFileSync(f, 'utf8'))) problems.push(`${relative(DIST, f)} lista /404/`);
 }
 
+// Fora da prévia, página com noindex (ex.: Cases/Blog vazios) não pode estar no sitemap.
+if (process.env.PREVIEW !== '1') {
+  const sitemapPaths = new Set();
+  for (const f of files.filter((f) => /sitemap-\d+\.xml$/.test(f))) {
+    for (const m of readFileSync(f, 'utf8').matchAll(/<loc>([^<]*)<\/loc>/g)) sitemapPaths.add(new URL(m[1]).pathname);
+  }
+  for (const file of pages) {
+    const name = relative(DIST, file).replaceAll(String.fromCharCode(92), '/');
+    const caminho = '/' + name.replace(/index\.html$/, '');
+    if (/<meta[^>]*name="robots"[^>]*noindex/.test(readFileSync(file, 'utf8')) && sitemapPaths.has(caminho)) {
+      problems.push(`${name}: tem noindex mas está no sitemap`);
+    }
+  }
+}
+
 if (problems.length) {
   console.error(`check-dist: ${problems.length} problema(s)\n- ${problems.join('\n- ')}`);
   process.exit(1);
