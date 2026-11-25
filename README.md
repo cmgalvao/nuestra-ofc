@@ -113,19 +113,32 @@ O código fica em <https://github.com/cmgalvao/nuestra-ofc>. A cada envio para o
 - A prévia fica fora do Google de propósito, para não competir com o agencianuestra.com.br quando ele for ao ar.
 - Links internos usam `withBase()` (`src/lib/url.ts`), para funcionarem tanto na prévia (pasta `/nuestra-ofc/`) quanto no site oficial (raiz).
 
+## Como publicar no site oficial
+
+O site oficial (<https://agencianuestra.com.br>) fica no Netlify e é montado a partir do branch `producao`. O branch `main` alimenta só a prévia do GitHub Pages.
+
+1. As mudanças entram no `main` e aparecem na prévia, para a Marília validar.
+2. Quando estiver aprovado, o Carlos pede ao Claude "publica". O Claude leva o `main` para o `producao` (`git push origin main:producao`).
+3. O Netlify publica sozinho em poucos minutos.
+4. Para voltar atrás: no painel do Netlify, em *Deploys*, abra um deploy anterior e clique em *Publish deploy*.
+
+Configuração do Netlify: arquivo `netlify.toml` (comando de build, pasta, Node 24). Cópias de teste do Netlify (`deploy-preview` e `branch-deploy`) saem com `PREVIEW=1`, ou seja, fora do Google.
+
+### Google Analytics e aviso de cookies
+
+O Google Analytics só existe no site oficial e só liga depois que o visitante aceita o aviso de cookies. Ele depende da variável `PUBLIC_GA_ID` (o ID de medição, no formato `G-XXXXXXXXXX`), cadastrada no Netlify em *Site configuration → Environment variables*. Sem essa variável não há aviso nem Google Analytics. Na prévia nunca aparecem.
+
 ## O que está pendente
 
-- Página Sobre.
+- Cases (aguardando o material da Marília).
+- Blog (aguardando o primeiro texto).
 - Perguntas frequentes.
 - Avaliações de clientes.
 - Prazo de resposta (quanto tempo a agência leva para responder um contato).
+- E-mail com o domínio (hoje só o Gmail).
 - A animação de abertura "do traço ao balão" (a decisão ainda não foi tomada).
-- Fase de publicação:
-  - hospedagem no Netlify;
-  - domínio `agencianuestra.com.br`;
-  - Google Analytics, com aviso de cookies;
-  - Google Search Console;
-  - política de privacidade.
+
+Enquanto Cases e Blog estão vazios, as páginas continuam no menu, mas ficam fora do Google (`noindex` e fora do mapa do site); passam a ser indexadas quando entrar o primeiro conteúdo.
 
 ## Testes (para quem for mexer no código)
 
