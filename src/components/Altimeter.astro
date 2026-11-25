@@ -43,6 +43,8 @@ const last = Math.max(stops.length - 1, 1);
     color: var(--orange-light); background: rgba(1, 62, 80, 0.78); padding: 0.3rem 0.45rem; border-radius: 999px;
   }
   [data-active] .label { display: block; }
+  /* Em tela estreita a régua cruzaria os cartões e a seção de contato: só aparece no desktop. */
+  @media (max-width: 899.98px) { .altimeter { display: none; } }
   @media (min-width: 900px) {
     .rail { top: 30svh; margin-top: 30svh; height: 44svh; margin-left: -1.9rem; }
     .label { font-size: 0.6875rem; right: 16px; }

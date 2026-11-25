@@ -63,6 +63,8 @@ const servicos = (await getCollection('servicos')).sort((a, b) => a.data.order -
     0%, 100% { transform: translateY(0) rotate(-2deg); }
     50% { transform: translateY(-12px) rotate(2deg); }
   }
+  /* No desktop a régua de altitude (e o rótulo) ocupa a faixa da direita: o carrossel termina antes dela, sem cobrir cartões. */
+  @media (min-width: 900px) { .row { margin-right: 7.5rem; } }
   @media (min-width: 600px) {
     .arch { right: -3rem; width: 16rem; height: 24rem; border-radius: 8rem 8rem 0 0; }
     .bal { right: 2rem; width: 8rem; }
@@ -75,6 +77,6 @@ const servicos = (await getCollection('servicos')).sort((a, b) => a.data.order -
     .inner { padding: 0 2.75rem; }
     h2 { max-width: calc(100% - 24rem); }
     /* Faixa de cartões de ponta a ponta, alinhada à esquerda com o título. */
-    .row { --gutter: max(2.75rem, calc((100% - 72rem) / 2 + 2.75rem)); margin-top: 2.75rem; padding-top: 1rem; padding-bottom: 1.5rem; gap: 1rem; }
+    .row { --gutter: max(2.75rem, calc((100% + 7.5rem - 72rem) / 2 + 2.75rem)); margin-top: 2.75rem; padding-top: 1rem; padding-bottom: 1.5rem; gap: 1rem; }
   }
 </style>

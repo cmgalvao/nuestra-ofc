@@ -128,8 +128,12 @@ test.describe('Home: comportamento', () => {
     expect(await transformOf(rise)).toBe(antes);
   });
 
-  test('régua de altitude acompanha o trecho atual', async ({ page }) => {
+  test('régua de altitude acompanha o trecho atual', async ({ page }, info) => {
     await page.goto('/');
+    if (info.project.name === 'mobile') {
+      await expect(page.locator('[data-altimeter]')).toBeHidden();
+      return;
+    }
     const regua = page.locator('[data-altimeter]');
     await expect(regua).toHaveAttribute('data-current', 'decolagem');
     await expect(regua.locator('[data-label]').filter({ visible: true })).toHaveText(['Home']);
