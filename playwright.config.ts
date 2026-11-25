@@ -2,10 +2,11 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: 'tests/e2e',
+  // Porta 4323 (não 4321) para nunca reaproveitar o `npm run dev` aberto, que injeta a barra de ferramentas do Astro.
   webServer: [
     {
-      command: 'npm run build && npm run preview -- --port 4321 --ignore-lock',
-      url: 'http://localhost:4321/',
+      command: 'npm run build && npm run preview -- --port 4323 --ignore-lock',
+      url: 'http://localhost:4323/',
       reuseExistingServer: true,
       timeout: 180_000,
     },
@@ -17,7 +18,7 @@ export default defineConfig({
       timeout: 180_000,
     },
   ],
-  use: { baseURL: 'http://localhost:4321' },
+  use: { baseURL: 'http://localhost:4323' },
   projects: [
     { name: 'mobile', testIgnore: /fixtures.spec/, use: { ...devices['Desktop Chrome'], viewport: { width: 375, height: 812 } } },
     { name: 'desktop', testIgnore: /fixtures.spec/, use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } } },
