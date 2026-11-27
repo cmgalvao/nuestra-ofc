@@ -82,8 +82,8 @@ test.describe('Home: estrutura e conteúdo', () => {
     );
   });
 
-  test('sem trechos de Cases e Blog enquanto as coleções estão vazias', async ({ page }) => {
-    await expect(page.locator('main a[href^="/cases/"], main a[href^="/blog/"]')).toHaveCount(0);
+  test('sem trecho de Cases enquanto a coleção está vazia', async ({ page }) => {
+    await expect(page.locator('main a[href^="/cases/"]')).toHaveCount(0);
   });
 });
 

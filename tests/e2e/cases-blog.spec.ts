@@ -31,7 +31,7 @@ test.describe('Cases sem conteúdo (build padrão)', () => {
   });
 });
 
-test.describe('Blog sem conteúdo (build padrão)', () => {
+test.describe('Blog com o primeiro post (build padrão)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/blog/');
   });
@@ -49,23 +49,61 @@ test.describe('Blog sem conteúdo (build padrão)', () => {
     );
   });
 
-  test('estado sem conteúdo, sem lista nem article', async ({ page }) => {
+  test('lista o post, sem o aviso de vazio', async ({ page }) => {
     const main = page.locator('main');
-    await expect(main.getByText(BLOG_VAZIO)).toBeVisible();
-    await expect(main.getByRole('link', { name: 'Ver no Instagram' })).toHaveAttribute('href', INSTAGRAM);
-    await expect(main.locator('article')).toHaveCount(0);
-    await expect(main.locator('ul.posts li, .grade li')).toHaveCount(0);
+    await expect(main.getByText(BLOG_VAZIO)).toHaveCount(0);
+    const itens = main.locator('ul.posts li a.item');
+    await expect(itens).toHaveCount(1);
+    await expect(itens.first()).toHaveAttribute('href', '/blog/ninguem-controla-o-vento/');
+    await expect(itens.first()).toContainText('Ninguém controla o vento, mas dá pra escolher a altitude');
   });
 });
 
-test('Home sem conteúdo não linka Cases nem Blog fora do menu e do rodapé', async ({ page }) => {
-  await page.goto('/');
-  await expect(page.locator('main a[href^="/cases/"], main a[href^="/blog/"]')).toHaveCount(0);
-  await expect(page.locator('#cases, #blog')).toHaveCount(0);
+test.describe('Post "Ninguém controla o vento"', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/blog/ninguem-controla-o-vento/');
+  });
+
+  test('cabeçalho, texto revisado e chamada final', async ({ page }) => {
+    await expect(page).toHaveTitle('Ninguém controla o vento, mas dá pra escolher a altitude | Nuestra Agência');
+    await expect(page.locator('h1')).toHaveCount(1);
+    await expect(page.locator('h1')).toHaveText('Ninguém controla o vento, mas dá pra escolher a altitude');
+    const article = page.locator('main article');
+    await expect(article.locator('.meta')).toContainText('Marília Zabott');
+    await expect(article.locator('time')).toHaveAttribute('datetime', '2026-11-26');
+    const corpo = article.locator('.corpo');
+    await expect(corpo).toContainText('O segredo é o piloto subir');
+    await expect(corpo).toContainText('não tem como brigar com o vento. Mesmo assim');
+    await expect(corpo).toContainText('Santos-Dumont, aliás, mostrou a que veio');
+    await expect(corpo.locator('p')).toHaveCount(7);
+    const cta = article.locator('.cta');
+    await expect(cta).toContainText('Quando quiser voar, é só nos chamar.');
+    expect(await cta.getByRole('link', { name: 'Falar com a Nuestra' }).getAttribute('href')).toMatch(/^https:\/\/wa\.me\/5555991932679\?text=/);
+  });
+
+  test('JSON-LD BlogPosting e indexável', async ({ page, request }) => {
+    await expect(page.locator('meta[name=robots]')).toHaveCount(0);
+    const blocos = await page.locator('script[type="application/ld+json"]').allTextContents();
+    const post = blocos.map((b) => JSON.parse(b)).find((j) => j['@type'] === 'BlogPosting');
+    expect(post.headline).toBe('Ninguém controla o vento, mas dá pra escolher a altitude');
+    expect(post.author.name).toBe('Marília Zabott');
+    expect(post.datePublished).toBe('2026-11-26');
+    const sitemap = await (await request.get('/sitemap-0.xml')).text();
+    expect(sitemap).toContain('agencianuestra.com.br/blog/ninguem-controla-o-vento/');
+    expect(sitemap).toContain('agencianuestra.com.br/blog/</loc>');
+  });
 });
 
-test.describe('Cases e Blog vazios ficam fora do Google (build padrão)', () => {
-  for (const rota of ['/cases/', '/blog/']) {
+test('Home mostra o trecho do Blog e ainda não o de Cases', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('#cases')).toHaveCount(0);
+  await expect(page.locator('main a[href^="/cases/"]')).toHaveCount(0);
+  await expect(page.locator('#blog a.item')).toHaveCount(1);
+  await expect(page.locator('#blog a.item')).toHaveAttribute('href', '/blog/ninguem-controla-o-vento/');
+});
+
+test.describe('Cases vazio fica fora do Google (build padrão)', () => {
+  for (const rota of ['/cases/']) {
     test(`${rota} tem noindex e não está no sitemap`, async ({ page, request }) => {
       await page.goto(rota);
       await expect(page.locator('meta[name=robots]')).toHaveAttribute('content', 'noindex');

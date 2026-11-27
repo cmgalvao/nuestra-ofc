@@ -1,6 +1,6 @@
 import type { Locator } from '@playwright/test';
 
-export const PAGES: string[] = ['/404/', '/servicos/', '/', '/sobre/', '/politica-de-privacidade/', '/contatos/', '/cases/', '/blog/'];
+export const PAGES: string[] = ['/404/', '/servicos/', '/', '/sobre/', '/politica-de-privacidade/', '/contatos/', '/cases/', '/blog/', '/blog/ninguem-controla-o-vento/'];
 
 /** Imagens (<img>) e fundos CSS dentro de `root` cuja origem contém `nome`. */
 export async function countAsset(root: Locator, nome: string) {

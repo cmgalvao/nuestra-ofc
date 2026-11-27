@@ -41,6 +41,8 @@ const blog = defineCollection({
       capaAlt: z.string(),
       data: z.coerce.date(),
       autor: z.string(),
+      /** Frase da caixa de contato no fim do post. Sem ela, vale "Vamos decolar juntos?". */
+      chamada: z.string().optional(),
     })
     .strict(),
 });
