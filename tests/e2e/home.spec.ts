@@ -142,32 +142,36 @@ test.describe('Home: comportamento', () => {
     await expect(regua.locator('[data-label]').filter({ visible: true })).toHaveText(['Serviços']);
   });
 
-  test('régua de altitude também para em Sobre, entre Serviços e Contato', async ({ page }, info) => {
+  test('régua de altitude para em cada trecho da Home, inclusive Sobre e Blog', async ({ page }, info) => {
     test.skip(info.project.name === 'mobile', 'a régua só aparece no desktop');
     await page.goto('/');
     const regua = page.locator('[data-altimeter]');
-    await expect(regua.locator('[data-stop]')).toHaveText(['Home', 'Serviços', 'Sobre', 'Contato']);
+    await expect(regua.locator('[data-stop]')).toHaveText(['Home', 'Serviços', 'Sobre', 'Blog', 'Contato']);
     await page.evaluate(() => document.getElementById('sobre')!.scrollIntoView({ block: 'center', behavior: 'instant' }));
     await expect(regua).toHaveAttribute('data-current', 'sobre');
     await expect(regua.locator('[data-label]').filter({ visible: true })).toHaveText(['Sobre']);
+    await page.evaluate(() => document.getElementById('blog')!.scrollIntoView({ block: 'center', behavior: 'instant' }));
+    await expect(regua).toHaveAttribute('data-current', 'blog');
+    await expect(regua.locator('[data-label]').filter({ visible: true })).toHaveText(['Blog']);
     await page.evaluate(() => document.getElementById('contato')!.scrollIntoView({ block: 'center', behavior: 'instant' }));
     await expect(regua).toHaveAttribute('data-current', 'contato');
   });
 
-  test('o trecho Sobre da Home é centralizado, como o de Contato', async ({ page }) => {
+  test('os trechos Sobre e Blog da Home são centralizados, como o de Contato', async ({ page }) => {
     await page.goto('/');
     const centro = (seletor: string) =>
-      page.locator(seletor).evaluate((el) => {
+      page.locator(seletor).first().evaluate((el) => {
         const r = el.getBoundingClientRect();
         return { meio: Math.round(r.left + r.width / 2), alinhamento: getComputedStyle(el).textAlign };
       });
     const larguraUtil = await page.evaluate(() => document.documentElement.clientWidth);
-    for (const seletor of ['#sobre h2', '#sobre .lead', '#sobre .todos']) {
-      await page.locator(seletor).scrollIntoViewIfNeeded();
+    for (const seletor of ['#sobre h2', '#sobre .lead', '#sobre .todos', '#blog h2', '#blog .grade', '#blog .item', '#blog .todos']) {
+      await page.locator(seletor).first().scrollIntoViewIfNeeded();
       const { meio } = await centro(seletor);
       expect(Math.abs(meio - larguraUtil / 2), `${seletor} fora do centro`).toBeLessThanOrEqual(2);
     }
     expect((await centro('#sobre h2')).alinhamento).toBe('center');
+    expect((await centro('#blog h2')).alinhamento).toBe('center');
     expect((await centro('#contato h2')).alinhamento).toBe('center');
   });
 
