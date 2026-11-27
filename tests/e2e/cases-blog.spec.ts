@@ -94,6 +94,62 @@ test.describe('Post "Ninguém controla o vento"', () => {
   });
 });
 
+test.describe('Post: compartilhar no Instagram', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      const w = window as unknown as { copiado?: string };
+      Object.defineProperty(navigator, 'clipboard', { value: { writeText: async (t: string) => { w.copiado = t; } } });
+    });
+    await page.goto('/blog/ninguem-controla-o-vento/');
+    await page.getByRole('button', { name: 'Instagram' }).click();
+  });
+  const copiado = (page: import('@playwright/test').Page) => page.evaluate(() => (window as unknown as { copiado?: string }).copiado);
+  const LINK = 'https://agencianuestra.com.br/blog/ninguem-controla-o-vento/';
+
+  test('abre a janela com a arte vertical pronta', async ({ page }) => {
+    const janela = page.getByRole('dialog', { name: 'Leve este voo para o seu story' });
+    await expect(janela).toBeVisible();
+    const arte = janela.locator('canvas');
+    await expect(arte).toHaveAttribute('width', '1080');
+    await expect(arte).toHaveAttribute('height', '1920');
+    await expect(arte).toHaveAttribute('data-pronta', '');
+    await expect(janela.locator('input')).toHaveCount(0);
+    await janela.getByRole('button', { name: 'Fechar' }).click();
+    await expect(janela).toBeHidden();
+  });
+
+  test('no computador baixa a arte e copia o link', async ({ page }, info) => {
+    test.skip(info.project.name === 'mobile', 'só computador');
+    const baixar = page.getByRole('button', { name: 'Baixar a arte e copiar o link' });
+    await expect(baixar).toBeEnabled();
+    const [arquivo] = await Promise.all([page.waitForEvent('download'), baixar.click()]);
+    expect(arquivo.suggestedFilename()).toBe('nuestra-ninguem-controla-o-vento.jpg');
+    expect(await copiado(page)).toBe(LINK);
+    await expect(page.getByRole('status')).toHaveText('Link copiado. Cole na figurinha Link.');
+  });
+
+  test('no celular abre o menu do aparelho só com a imagem e copia o link', async ({ page }, info) => {
+    test.skip(info.project.name !== 'mobile', 'só celular');
+    await page.evaluate(() => {
+      const w = window as unknown as { enviado?: string };
+      const original = window.matchMedia.bind(window);
+      window.matchMedia = (q: string) => (q === '(pointer: coarse)' ? ({ matches: true } as MediaQueryList) : original(q));
+      Object.defineProperty(navigator, 'canShare', { value: () => true, configurable: true });
+      Object.defineProperty(navigator, 'share', {
+        configurable: true,
+        value: async (d: ShareData) => { w.enviado = `${Object.keys(d).join()}|${d.files![0].name}|${d.files![0].type}`; },
+      });
+    });
+    // Reabre para o botão ser preparado já com o menu de compartilhar disponível.
+    await page.getByRole('button', { name: 'Fechar' }).click();
+    await page.getByRole('button', { name: 'Instagram' }).click();
+    await page.getByRole('button', { name: 'Compartilhar no Instagram' }).click();
+    await expect.poll(() => page.evaluate(() => (window as unknown as { enviado?: string }).enviado))
+      .toBe('files|nuestra-ninguem-controla-o-vento.jpg|image/jpeg');
+    expect(await copiado(page)).toBe(LINK);
+  });
+});
+
 test('Home mostra o trecho do Blog e ainda não o de Cases', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('#cases')).toHaveCount(0);

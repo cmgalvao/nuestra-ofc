@@ -12,6 +12,7 @@ import { optionalCollection } from '../../lib/optional-collection';
 import { dataBR, dataISO } from '../../lib/format';
 import balao from '../../assets/balao.png';
 import papel from '../../assets/papel.webp';
+import logo from '../../assets/logo-horizontal.png';
 
 export async function getStaticPaths() {
   const posts = await optionalCollection('blog');
@@ -26,6 +27,9 @@ const url = canonicalUrl(path);
 const crumbs = [{ name: 'Blog', path: '/blog/' }, { name: titulo, path }];
 const minutos = Math.max(1, Math.round((entry.body ?? '').split(/\s+/).filter(Boolean).length / 200));
 const imagemOg = await getImage({ src: capa, width: 1200 });
+// Arte de story: o navegador desenha com estas imagens quando a pessoa toca em "Instagram".
+const capaStory = await getImage({ src: capa, width: 1080, format: 'jpg' });
+const logoStory = await getImage({ src: logo, width: 600, format: 'webp' });
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
@@ -74,8 +78,31 @@ const jsonLd = {
           <span>Compartilhar:</span>
           <a href={`https://wa.me/?text=${encodeURIComponent(`${titulo} ${url}`)}`} target="_blank" rel="noopener">WhatsApp</a>
           <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`} target="_blank" rel="noopener">LinkedIn</a>
+          <button type="button" data-abrir-story>Instagram</button>
           <button type="button" data-copiar={url}>Copiar link</button>
         </div>
+        <dialog
+          class="story"
+          data-story
+          data-link={url}
+          data-titulo={titulo}
+          data-capa={capaStory.src}
+          data-logo={logoStory.src}
+          data-papel={papel.src}
+          data-arquivo={`nuestra-${entry.id}.jpg`}
+          aria-labelledby="story-t"
+        >
+          <button type="button" class="fechar" data-fechar aria-label="Fechar">×</button>
+          <p class="story-t" id="story-t">Leve este voo para o seu story</p>
+          <canvas width="1080" height="1920" role="img" aria-label={`Arte do story: ${titulo}`}></canvas>
+          <ol>
+            <li>O link do texto é copiado junto.</li>
+            <li>No Instagram, escolha <b>Stories</b>.</li>
+            <li>Adicione a figurinha <b>Link</b> e cole.</li>
+          </ol>
+          <button type="button" class="btn enviar" data-enviar disabled>Preparando a arte…</button>
+          <p class="aviso" data-aviso role="status"></p>
+        </dialog>
         <a class="volta" href={withBase('/blog/')}><span aria-hidden="true">←</span> Todos os posts</a>
       </div>
     </div>
@@ -138,6 +165,16 @@ const jsonLd = {
   .compartilhar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; padding: 1rem 0; border-top: 1px dashed rgba(1, 62, 80, 0.3); border-bottom: 1px dashed rgba(1, 62, 80, 0.3); font-size: 0.95rem; }
   .compartilhar span { font-weight: 500; }
   .compartilhar a, .compartilhar button { color: var(--navy); font: inherit; background: none; border: 0; padding: 0; text-decoration: underline; text-decoration-color: var(--orange); text-underline-offset: 3px; cursor: pointer; }
+  /* Janela do Instagram */
+  .story { width: min(24rem, calc(100vw - 1.5rem)); max-height: calc(100dvh - 1.5rem); margin: auto; padding: 1.5rem 1.25rem 1rem; border: 0; border-radius: 1rem; background: var(--cream); color: var(--navy); text-align: center; }
+  .story::backdrop { background: rgba(1, 62, 80, 0.75); }
+  .fechar { position: absolute; top: 0.4rem; right: 0.6rem; border: 0; background: none; color: var(--navy); font-size: 1.8rem; line-height: 1; cursor: pointer; }
+  .story-t { margin: 0 1.5rem 1rem; font-family: var(--font-title); font-weight: 800; font-size: 1.25rem; line-height: 1.2; }
+  .story canvas { display: block; height: min(20rem, 42dvh); width: auto; margin: 0 auto; border-radius: 0.6rem; background: #1b5360; box-shadow: 0 8px 20px rgba(1, 62, 80, 0.3); }
+  .story ol { margin: 1rem auto 0; max-width: 18rem; padding-left: 1.25rem; text-align: left; font-size: 0.9rem; line-height: 1.55; }
+  .enviar { border: 0; font: inherit; font-weight: 500; cursor: pointer; margin-top: 0.9rem; }
+  .enviar:disabled { opacity: 0.6; cursor: wait; }
+  .aviso { min-height: 1.4em; margin: 0.5rem 0 0; font-size: 0.9rem; font-weight: 500; }
   .volta { display: inline-block; margin-top: 1.5rem; color: var(--navy); font-weight: 600; }
   a:focus-visible, button:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
   .cta .btn:focus-visible { outline-color: #fff; }

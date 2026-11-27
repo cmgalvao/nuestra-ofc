@@ -91,6 +91,8 @@ autor: "EXEMPLO — nome do autor"
 Texto do post.
 ```
 
+O botão **Instagram** do post não precisa de nada: a arte de story é montada sozinha com o `titulo` e a `capa`. Capas com o assunto no centro funcionam melhor, porque a arte corta as laterais.
+
 Se algum campo obrigatório faltar, o `npm run dev` mostra um aviso dizendo qual.
 
 ### Regras para os arquivos de Cases e Blog
